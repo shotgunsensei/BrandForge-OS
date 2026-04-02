@@ -21,6 +21,10 @@ import {
   Moon,
   Sun,
   Workflow,
+  Plug,
+  Package,
+  Shield,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -47,6 +51,20 @@ const navSections = [
     items: [
       { href: "/strategy", label: "Strategy", icon: Lightbulb },
       { href: "/analytics", label: "Analytics", icon: BarChart3 },
+      { href: "/reports", label: "Reports", icon: FileText },
+    ],
+  },
+  {
+    label: "Marketplace",
+    items: [
+      { href: "/templates", label: "Templates", icon: Package },
+      { href: "/integrations", label: "Integrations", icon: Plug },
+    ],
+  },
+  {
+    label: "Admin",
+    items: [
+      { href: "/admin", label: "Admin Console", icon: Shield },
     ],
   },
 ];

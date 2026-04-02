@@ -12,6 +12,10 @@ export const templatesTable = pgTable("templates", {
   tags: text("tags").array().notNull().default([]),
   isGlobal: boolean("is_global").notNull().default(false),
   isFeatured: boolean("is_featured").notNull().default(false),
+  isPremium: boolean("is_premium").notNull().default(false),
+  price: integer("price").notNull().default(0),
   previewUrl: text("preview_url"),
+  previewImage: text("preview_image"),
+  usageCount: integer("usage_count").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });

@@ -9,6 +9,12 @@ import copyAssetsRouter from "./copyAssets";
 import calendarItemsRouter from "./calendarItems";
 import dashboardRouter from "./dashboard";
 import aiRouter from "./ai";
+import billingRouter from "./billing";
+import integrationsHubRouter from "./integrationsHub";
+import templatesMarketplaceRouter from "./templatesMarketplace";
+import adminRouter from "./admin";
+import reportsRouter from "./reportsRoutes";
+import notificationsRouter from "./notificationsRoutes";
 
 const router: IRouter = Router();
 
@@ -22,5 +28,11 @@ router.use(copyAssetsRouter);
 router.use(calendarItemsRouter);
 router.use(dashboardRouter);
 router.use(aiRouter);
+router.use(billingRouter);
+router.use(integrationsHubRouter);
+router.use(templatesMarketplaceRouter);
+router.use(adminRouter);
+router.use(reportsRouter);
+router.use(notificationsRouter);
 
 export default router;

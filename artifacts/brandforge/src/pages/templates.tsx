@@ -1,0 +1,218 @@
+import { AppLayout } from "@/components/app-layout";
+import { useTenant } from "@/lib/tenant-context";
+import { useTemplates, useUseTemplate } from "@/lib/api-hooks";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import {
+  Search, Sparkles, Lock, Star, Eye, Copy, ArrowRight,
+  Megaphone, PenTool, Globe, Mail, Calendar, Palette, Package, Filter
+} from "lucide-react";
+
+const typeIcons: Record<string, any> = {
+  campaign: Megaphone, copy_pack: PenTool, landing_page: Globe, email_sequence: Mail,
+  content_calendar: Calendar, brand_kit: Palette, design_pack: Package,
+};
+
+const categories = ["all", "campaign", "copy", "landing_page", "email", "social", "brand", "design"];
+const categoryLabels: Record<string, string> = {
+  all: "All", campaign: "Campaigns", copy: "Copy Packs", landing_page: "Landing Pages",
+  email: "Email", social: "Social", brand: "Brand Kits", design: "Design",
+};
+
+const demoTemplates = [
+  { id: 1, name: "Product Launch Campaign", description: "Complete campaign template with messaging, ad copy, social posts, and email sequences for a product launch.", category: "campaign", templateType: "campaign", tags: ["launch", "product", "multi-channel"], isGlobal: true, isFeatured: true, isPremium: false, usageCount: 1247 },
+  { id: 2, name: "SaaS Onboarding Emails", description: "7-email welcome sequence for SaaS products. Includes activation, feature highlights, and conversion emails.", category: "email", templateType: "email_sequence", tags: ["saas", "onboarding", "email"], isGlobal: true, isFeatured: true, isPremium: false, usageCount: 892 },
+  { id: 3, name: "Agency Client Report", description: "White-label performance report template with KPI blocks, campaign summaries, and recommendations.", category: "campaign", templateType: "campaign", tags: ["agency", "report", "white-label"], isGlobal: true, isFeatured: false, isPremium: true, usageCount: 456 },
+  { id: 4, name: "Social Media Content Pack", description: "30 days of social media content templates with hooks, CTAs, and image suggestions for multiple platforms.", category: "social", templateType: "copy_pack", tags: ["social", "content", "30-day"], isGlobal: true, isFeatured: true, isPremium: false, usageCount: 2103 },
+  { id: 5, name: "Lead Gen Landing Page", description: "High-converting landing page template with hero, benefits, testimonials, and lead capture form.", category: "landing_page", templateType: "landing_page", tags: ["lead-gen", "conversion", "landing"], isGlobal: true, isFeatured: false, isPremium: false, usageCount: 678 },
+  { id: 6, name: "Brand Identity Kit", description: "Complete brand identity template with voice guidelines, color palette, typography, and messaging pillars.", category: "brand", templateType: "brand_kit", tags: ["brand", "identity", "guidelines"], isGlobal: true, isFeatured: false, isPremium: true, usageCount: 334 },
+  { id: 7, name: "Black Friday Campaign", description: "Full Black Friday/Cyber Monday campaign with countdown sequences, ad copy, and urgency messaging.", category: "campaign", templateType: "campaign", tags: ["seasonal", "ecommerce", "sale"], isGlobal: true, isFeatured: true, isPremium: false, usageCount: 1567 },
+  { id: 8, name: "B2B LinkedIn Content", description: "Thought leadership content templates for LinkedIn with carousel, article, and post formats.", category: "social", templateType: "copy_pack", tags: ["b2b", "linkedin", "thought-leadership"], isGlobal: true, isFeatured: false, isPremium: true, usageCount: 289 },
+  { id: 9, name: "E-commerce Ad Pack", description: "Google and Meta ad copy templates for e-commerce including product, retargeting, and seasonal ads.", category: "campaign", templateType: "campaign", tags: ["ecommerce", "ads", "google", "meta"], isGlobal: true, isFeatured: false, isPremium: false, usageCount: 934 },
+  { id: 10, name: "Webinar Funnel", description: "Complete webinar promotion funnel with registration page, reminder emails, follow-up sequences, and replay campaign.", category: "email", templateType: "email_sequence", tags: ["webinar", "funnel", "b2b"], isGlobal: true, isFeatured: false, isPremium: true, usageCount: 167 },
+  { id: 11, name: "Customer Win-Back Sequence", description: "Automated email sequence to re-engage churned customers with personalized offers and updates.", category: "email", templateType: "email_sequence", tags: ["retention", "win-back", "automation"], isGlobal: true, isFeatured: false, isPremium: false, usageCount: 445 },
+  { id: 12, name: "Agency Pitch Deck Copy", description: "Copy templates for agency pitch decks including case study formats, capabilities pages, and proposal language.", category: "copy", templateType: "copy_pack", tags: ["agency", "pitch", "sales"], isGlobal: true, isFeatured: false, isPremium: true, usageCount: 123 },
+];
+
+export default function TemplatesPage() {
+  const { tenantId } = useTenant();
+  const { data: apiTemplates } = useTemplates(tenantId);
+  const useTemplateMutation = useUseTemplate(tenantId);
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [showPremiumOnly, setShowPremiumOnly] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
+
+  const allTemplates = apiTemplates && apiTemplates.length > 0 ? apiTemplates : demoTemplates;
+
+  const filtered = allTemplates.filter((t: any) => {
+    if (search && !t.name.toLowerCase().includes(search.toLowerCase()) && !t.description?.toLowerCase().includes(search.toLowerCase())) return false;
+    if (categoryFilter !== "all" && t.category !== categoryFilter) return false;
+    if (showPremiumOnly && !t.isPremium) return false;
+    return true;
+  });
+
+  const featured = allTemplates.filter((t: any) => t.isFeatured);
+
+  return (
+    <AppLayout>
+      <div className="p-6 lg:p-8 space-y-6 max-w-6xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Template Marketplace</h1>
+            <p className="text-muted-foreground text-sm">Ready-to-use marketing templates for every channel</p>
+          </div>
+          <Badge variant="secondary" className="text-xs">
+            <Package className="h-3 w-3 mr-1" />
+            {allTemplates.length} templates
+          </Badge>
+        </div>
+
+        {featured.length > 0 && categoryFilter === "all" && !search && (
+          <div className="space-y-3">
+            <h2 className="text-sm font-semibold flex items-center gap-1.5">
+              <Star className="h-4 w-4 text-yellow-500" /> Featured Templates
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {featured.slice(0, 3).map((t: any) => (
+                <Card key={t.id} className="group hover:shadow-md transition-all border-yellow-200/50 dark:border-yellow-800/30 bg-gradient-to-br from-yellow-50/50 to-transparent dark:from-yellow-900/10">
+                  <CardContent className="pt-5 space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div className="w-10 h-10 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
+                        {(() => { const Icon = typeIcons[t.templateType] || Sparkles; return <Icon className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />; })()}
+                      </div>
+                      <Badge variant="secondary" className="text-[10px] bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
+                        <Star className="h-2.5 w-2.5 mr-0.5 fill-current" /> Featured
+                      </Badge>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-sm">{t.name}</h3>
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{t.description}</p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-muted-foreground">{t.usageCount?.toLocaleString()} uses</span>
+                      <Button size="sm" className="rounded-full text-xs h-7" onClick={() => setSelectedTemplate(t)}>
+                        Use Template <ArrowRight className="h-3 w-3 ml-1" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input placeholder="Search templates..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {categories.map(cat => (
+              <Button key={cat} variant={categoryFilter === cat ? "default" : "outline"} size="sm" className="rounded-full text-xs" onClick={() => setCategoryFilter(cat)}>
+                {categoryLabels[cat]}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map((t: any) => (
+            <Card key={t.id} className={`group hover:shadow-md transition-all ${t.isPremium ? "border-purple-200/50 dark:border-purple-800/30" : ""}`}>
+              <CardContent className="pt-5 space-y-3">
+                <div className="flex items-start justify-between">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${t.isPremium ? "bg-purple-100 dark:bg-purple-900/30" : "bg-muted"}`}>
+                    {(() => { const Icon = typeIcons[t.templateType] || Sparkles; return <Icon className={`h-5 w-5 ${t.isPremium ? "text-purple-600 dark:text-purple-400" : "text-primary"}`} />; })()}
+                  </div>
+                  <div className="flex gap-1">
+                    {t.isPremium && (
+                      <Badge variant="secondary" className="text-[10px] bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                        <Lock className="h-2.5 w-2.5 mr-0.5" /> Premium
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm">{t.name}</h3>
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{t.description}</p>
+                </div>
+                {t.tags && t.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {t.tags.slice(0, 3).map((tag: string) => (
+                      <Badge key={tag} variant="outline" className="text-[10px]">{tag}</Badge>
+                    ))}
+                  </div>
+                )}
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <span className="text-[10px] text-muted-foreground">{t.usageCount?.toLocaleString() || 0} uses</span>
+                  <div className="flex gap-1.5">
+                    <Button variant="ghost" size="sm" className="rounded-full text-xs h-7" onClick={() => setSelectedTemplate(t)}>
+                      <Eye className="h-3 w-3 mr-1" /> Preview
+                    </Button>
+                    <Button size="sm" className="rounded-full text-xs h-7" onClick={() => { if (t.id) useTemplateMutation.mutate(t.id); }}>
+                      <Copy className="h-3 w-3 mr-1" /> Use
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {selectedTemplate && (
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={() => setSelectedTemplate(null)}>
+            <Card className="max-w-lg w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+              <CardContent className="pt-6 space-y-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${selectedTemplate.isPremium ? "bg-purple-100 dark:bg-purple-900/30" : "bg-muted"}`}>
+                      {(() => { const Icon = typeIcons[selectedTemplate.templateType] || Sparkles; return <Icon className="h-6 w-6 text-primary" />; })()}
+                    </div>
+                    <div>
+                      <h2 className="font-bold text-lg">{selectedTemplate.name}</h2>
+                      <div className="flex gap-1 mt-1">
+                        {selectedTemplate.isPremium && <Badge className="text-[10px] bg-purple-100 text-purple-700">Premium</Badge>}
+                        {selectedTemplate.isFeatured && <Badge className="text-[10px] bg-yellow-100 text-yellow-700">Featured</Badge>}
+                      </div>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={() => setSelectedTemplate(null)}>✕</Button>
+                </div>
+                <p className="text-sm text-muted-foreground">{selectedTemplate.description}</p>
+                {selectedTemplate.tags && (
+                  <div className="flex flex-wrap gap-1">
+                    {selectedTemplate.tags.map((tag: string) => (
+                      <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
+                    ))}
+                  </div>
+                )}
+                <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Category</span>
+                    <span className="font-medium capitalize">{selectedTemplate.category}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Type</span>
+                    <span className="font-medium capitalize">{selectedTemplate.templateType?.replace(/_/g, " ")}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Used by</span>
+                    <span className="font-medium">{selectedTemplate.usageCount?.toLocaleString()} teams</span>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button className="flex-1 rounded-full" onClick={() => { if (selectedTemplate.id) useTemplateMutation.mutate(selectedTemplate.id); setSelectedTemplate(null); }}>
+                    {selectedTemplate.isPremium ? <><Lock className="h-3.5 w-3.5 mr-1.5" /> Unlock & Use</> : <><Copy className="h-3.5 w-3.5 mr-1.5" /> Use Template</>}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
+    </AppLayout>
+  );
+}

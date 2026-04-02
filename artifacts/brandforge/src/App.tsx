@@ -19,6 +19,10 @@ import Analytics from "./pages/analytics";
 import SettingsPage from "./pages/settings";
 import Strategy from "./pages/strategy";
 import AIWorkflows from "./pages/ai-workflows";
+import IntegrationsPage from "./pages/integrations";
+import TemplatesPage from "./pages/templates";
+import AdminPage from "./pages/admin";
+import ReportsPage from "./pages/reports";
 
 function NotFound() {
   return <div className="p-8 text-center">404 Not Found</div>;
@@ -43,6 +47,10 @@ function Router() {
       <Route path="/settings" component={SettingsPage} />
       <Route path="/strategy" component={Strategy} />
       <Route path="/ai-workflows" component={AIWorkflows} />
+      <Route path="/integrations" component={IntegrationsPage} />
+      <Route path="/templates" component={TemplatesPage} />
+      <Route path="/admin" component={AdminPage} />
+      <Route path="/reports" component={ReportsPage} />
       <Route component={NotFound} />
     </Switch>
   );

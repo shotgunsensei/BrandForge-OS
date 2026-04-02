@@ -29,3 +29,16 @@ export function parseTenantId(req: Request): number {
   const raw = Array.isArray(req.params.tenantId) ? req.params.tenantId[0] : req.params.tenantId;
   return parseInt(raw, 10);
 }
+
+export async function requirePlatformAdmin(req: Request, res: Response): Promise<boolean> {
+  if (!requireAuth(req, res)) return false;
+  const memberships = await db
+    .select()
+    .from(membershipsTable)
+    .where(and(eq(membershipsTable.userId, req.user!.id), eq(membershipsTable.role, "owner")));
+  if (memberships.length === 0) {
+    res.status(403).json({ error: "Admin access required" });
+    return false;
+  }
+  return true;
+}

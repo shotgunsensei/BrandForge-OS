@@ -2,7 +2,7 @@
 
 ## Overview
 
-BrandForge OS is a multi-tenant AI-powered marketing SaaS platform. It provides brand management, campaign planning, AI copy generation, content calendar, analytics, AI workflows, and strategy workspace.
+BrandForge OS is a multi-tenant AI-powered marketing SaaS platform. It provides brand management, campaign planning, AI copy generation, content calendar, analytics, AI workflows, strategy workspace, integrations hub, template marketplace, admin console, and white-label reports.
 
 pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
 
@@ -49,7 +49,7 @@ artifacts-monorepo/
 Core tables:
 - **users** - Replit Auth users (id, username, email, image)
 - **sessions** - Auth sessions
-- **tenants** - Workspaces (name, slug, plan, industry, onboardingCompleted, aiCreditsUsed/Limit)
+- **tenants** - Workspaces (name, slug, plan, industry, onboardingCompleted, aiCreditsUsed/Limit, billing fields, activation score)
 - **memberships** - User-tenant association with roles (owner/admin/member)
 - **brands** - Brand identities (colors, fonts, voiceTone, guidelines)
 - **personas** - Customer personas
@@ -61,13 +61,27 @@ Core tables:
 
 Phase 2 tables:
 - **offers** - Campaign offers/promotions
-- **templates** - Campaign/content templates
+- **templates** - Campaign/content templates (expanded with isPremium, isFeatured, usageCount, tags)
 - **comments** - Collaboration comments on entities
 - **notifications** - User notifications
 - **landing_pages** - Landing page content
 - **campaign_tasks** - Campaign checklist/task items
 - **ai_workflows** - Saved AI workflow definitions
-- **integrations** - Third-party integration configs
+- **integrations** - Third-party integration configs (expanded with accountName, accountId, connectedAt, errorMessage)
+
+Phase 3 tables:
+- **subscriptions** - Billing subscriptions (plan, billingCycle, status, pricing, trial dates)
+- **billing_profiles** - Company billing info (email, address, tax ID, payment method)
+- **invoices** - Billing invoices (amount, status, period, PDF URL)
+- **add_on_purchases** - Add-on purchases (type, name, pricing, recurring)
+- **credit_packs** - AI credit packs (credits, remaining, expiry)
+- **campaign_metrics** - Campaign performance metrics (impressions, clicks, conversions, spend)
+- **sync_jobs** - Integration sync job tracking (status, progress, items)
+- **lead_submissions** - Lead capture form submissions
+- **reports** - Report definitions (type, date range, white-label branding)
+- **export_jobs** - Export job tracking (format, status, file)
+- **feature_flags** - Platform feature flags (key, enabled, target plans)
+- **recommendations** - AI recommendations for tenants
 
 Push schema: `pnpm --filter @workspace/db run push`
 
@@ -87,6 +101,22 @@ Push schema: `pnpm --filter @workspace/db run push`
 - **Members**: `/api/tenants/:id/members`
 - **Usage**: `/api/tenants/:id/usage`
 - **AI**: `/api/tenants/:id/ai/generate-copy`, `generate-strategy`, `generate-campaign-ideas`
+
+Phase 3 routes:
+- **Billing**: `/api/tenants/:id/subscription` (GET), `/api/tenants/:id/subscription/change` (POST), `/cancel`, `/reactivate`
+- **Billing Profile**: `/api/tenants/:id/billing-profile` (GET/PUT)
+- **Invoices**: `/api/tenants/:id/invoices` (GET)
+- **Add-ons**: `/api/tenants/:id/add-ons` (GET), `/api/tenants/:id/add-ons/purchase` (POST)
+- **Credit Packs**: `/api/tenants/:id/credit-packs` (GET)
+- **Usage Summary**: `/api/tenants/:id/usage-summary` (GET)
+- **Integrations Hub**: `/api/tenants/:id/integrations` (GET), `/connect`, `/disconnect`, `/sync`, `/sync-history`
+- **Templates**: `/api/templates` (GET global), `/api/tenants/:id/templates` (GET/POST), `/:templateId/use` (POST)
+- **Admin**: `/api/admin/overview`, `/tenants`, `/feature-flags` (GET/PUT), `/integrations-health`
+- **Reports**: `/api/tenants/:id/reports` (GET/POST), `/:reportId/generate` (POST)
+- **Exports**: `/api/tenants/:id/exports` (GET/POST)
+- **Notifications**: `/api/tenants/:id/notifications` (GET), `/:id/read`, `/read-all`
+- **Recommendations**: `/api/tenants/:id/recommendations` (GET), `/:id/dismiss`
+- **Leads**: `/api/tenants/:id/lead-submissions` (GET)
 
 All tenant routes require authentication + membership verification.
 
@@ -108,7 +138,11 @@ Authenticated pages (all use AppLayout with sidebar):
 - `/analytics` - Charts, metrics, channel breakdown, AI recommendations panel
 - `/strategy` - AI strategy generation + campaign ideas
 - `/ai-workflows` - 6 guided AI workflows (product launch, content plan, ad campaign, lead gen, email sequence, refresh messaging)
-- `/settings` - Tabbed settings (workspace, billing with usage meters, team with invite, integrations)
+- `/settings` - Tabbed settings (workspace, billing with plan management, usage meters, add-on store, team with invite, security)
+- `/integrations` - Integrations hub with 12 providers, search/filter by category, connect/disconnect/sync
+- `/templates` - Template marketplace with featured templates, categories, premium badges, preview modal
+- `/admin` - Admin console with overview KPIs, tenant list/search, feature flags management, integration health
+- `/reports` - Report builder with 6 report types, white-label branding, create/generate/export, KPI preview
 
 ## Design System
 
@@ -136,6 +170,23 @@ Uses OpenAI via Replit AI Integrations proxy. Environment variables:
 
 AI credit enforcement: checks `aiCreditsUsed < aiCreditsLimit` before each generation call. Returns 429 when limit exceeded.
 
+## Plan Tiers & Monetization
+
+- **Free**: 50 credits, 1 brand, 3 campaigns, $0
+- **Starter**: 200 credits, 3 brands, 10 campaigns, $19/mo
+- **Growth**: 1,000 credits, 10 brands, unlimited campaigns, $59/mo
+- **Agency**: 5,000 credits, 25 brands, unlimited campaigns, $149/mo
+- **Enterprise**: Unlimited credits, 999 brands, $399/mo
+
+Add-on catalog: credit packs (100/500/2000), storage (1GB/5GB), extra seats, premium templates, white-label reports, extra pages, advanced exports
+
+Plan config: `artifacts/api-server/src/lib/plan-limits.ts`
+
+## Frontend Data Hooks
+
+Phase 2 hooks: codegen from OpenAPI spec (`@workspace/api-client-react`, `@workspace/api-zod`)
+Phase 3 hooks: custom React Query hooks in `artifacts/brandforge/src/lib/api-hooks.ts` (30+ hooks for billing, integrations, templates, admin, reports, notifications, recommendations)
+
 ## Key Commands
 
 - `pnpm run typecheck` - TypeScript checking
@@ -148,7 +199,7 @@ AI credit enforcement: checks `aiCreditsUsed < aiCreditsLimit` before each gener
 
 ### `artifacts/api-server` (`@workspace/api-server`)
 
-Express 5 API server with auth middleware, tenant isolation, and AI generation routes.
+Express 5 API server with auth middleware, tenant isolation, AI generation routes, billing, integrations hub, templates, admin, reports, and notifications routes.
 
 ### `artifacts/brandforge` (`@workspace/brandforge`)
 
