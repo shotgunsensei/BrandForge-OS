@@ -1,0 +1,380 @@
+Build a production-ready SaaS web application called “BrandForge OS” (working title), a multi-tenant AI-powered marketing and advertising platform that helps businesses go from zero to hero with branding, design, campaigns, content creation, and performance optimization.
+
+PRIMARY PRODUCT GOAL
+The app should guide a user through the full marketing lifecycle:
+1. Brand setup
+2. Audience and offer definition
+3. Campaign planning
+4. Creative generation
+5. Landing page / ad asset creation
+6. Social/email/ad publishing preparation
+7. Analytics and optimization recommendations
+
+CORE POSITIONING
+This is not just a design tool and not just an AI copywriter.
+It is a business marketing operating system for small businesses, creators, consultants, agencies, and product owners.
+
+TARGET USERS
+- Solo founders
+- Small businesses
+- Agencies
+- Multi-brand operators
+- SaaS founders
+- E-commerce brands
+- Service businesses
+
+TECH STACK
+Choose a modern, scalable stack that works well in Replit and can be productionized:
+- Frontend: React + TypeScript + Tailwind + shadcn/ui
+- Backend: Node.js + TypeScript
+- Database: PostgreSQL with Prisma ORM
+- Auth: secure tenant-aware authentication
+- Storage: object storage abstraction for tenant files/assets
+- Payments: Stripe subscriptions + plan management
+- AI: pluggable AI service layer for copy, strategy, and recommendations
+- Charts/analytics: clean dashboard visualizations
+- Queue/background architecture where appropriate
+- Build with modularity and future API access in mind
+
+MULTI-TENANT REQUIREMENTS
+- True tenant isolation at the database layer
+- Every account belongs to a tenant/workspace
+- Support multiple users per tenant
+- Role-based access control:
+  - Owner
+  - Admin
+  - Editor
+  - Viewer
+  - Client
+- Tenant-scoped assets, brand kits, campaigns, designs, analytics, and billing
+- Prepare architecture for future white-label and custom domains
+- Include audit logs for important actions
+
+PRICING / PLAN MODEL
+Implement these plans in Stripe and throughout the app:
+1. Free
+   - 1 workspace
+   - 1 user
+   - 1 brand
+   - limited AI credits
+   - limited exports
+   - basic templates
+2. Starter ($19/mo)
+   - 1 user
+   - up to 3 brands/products
+   - moderate AI credits
+   - landing page builder
+   - social planner
+   - ad copy tools
+3. Growth ($59/mo)
+   - up to 5 users
+   - more brands
+   - higher AI credits
+   - creative suite
+   - approvals
+   - analytics dashboards
+   - integrations
+4. Agency ($149/mo)
+   - many client workspaces
+   - reusable templates
+   - white-label reports
+   - client approval workflows
+   - multi-brand management
+5. Enterprise ($399+/mo, custom)
+   - SSO-ready architecture
+   - audit logs
+   - API access
+   - custom permissions
+   - premium support
+
+Also implement:
+- annual billing discount support
+- usage metering for AI credits
+- upgrade/downgrade flows
+- feature gating by plan
+- billing portal
+- trial support
+- overage-ready architecture
+
+KEY MODULES
+
+1. ONBOARDING WIZARD
+Create a guided onboarding flow that asks:
+- business name
+- industry
+- business type
+- products/services
+- ideal customer
+- geographic market
+- tone/voice
+- competitors
+- goals (leads, sales, awareness, bookings, app installs, etc.)
+- channels (social, email, ads, SEO, content)
+- visual preferences
+- brand colors / logo upload
+
+At the end of onboarding, generate:
+- brand summary
+- ICP summary
+- messaging pillars
+- recommended first campaign
+- suggested content plan
+
+2. BRAND HQ
+A tenant-scoped brand center with:
+- logos
+- colors
+- typography settings
+- voice and tone guide
+- product/service catalog
+- offer library
+- audience personas
+- approved claims / disclaimers
+- brand rules for AI output
+
+3. AI STRATEGY ENGINE
+A strategy workspace that can generate:
+- positioning statements
+- value propositions
+- offers
+- campaign ideas
+- ad angles
+- hook libraries
+- content calendars
+- launch plans
+- marketing checklists
+- funnel suggestions
+
+Make outputs editable, savable, and reusable.
+
+4. CREATIVE STUDIO
+A built-in design and asset generation experience for:
+- static social posts
+- ad creatives
+- banners
+- thumbnails
+- email headers
+- landing page sections
+- product promo cards
+- carousel posts
+- printable flyers
+
+Include:
+- drag-and-drop canvas editor
+- brand-safe templates
+- asset library
+- text overlays
+- shape/image/background tools
+- resize for channel presets
+- export to PNG/JPG/PDF
+- AI-assisted layout suggestions
+- “generate variants” capability
+
+IMPORTANT:
+Do not rely only on AI image generation. Build a practical business editor that combines templates, text, uploaded assets, and structured layout blocks.
+
+5. COPY STUDIO
+Generate and manage:
+- headlines
+- CTAs
+- ad copy
+- email campaigns
+- product descriptions
+- landing page copy
+- social captions
+- scripts for short videos
+- blog outlines
+- retargeting ads
+- A/B variants
+
+Include tone controls, audience controls, length controls, and channel controls.
+
+6. CAMPAIGN BUILDER
+A guided campaign builder where users can create:
+- campaign objective
+- target audience
+- selected product/service
+- core message
+- offer
+- channels
+- asset bundle
+- copy bundle
+- launch checklist
+- approval state
+- timeline
+
+Each campaign should have:
+- overview
+- assets
+- copy
+- checklist
+- performance tab
+- notes/activity log
+
+7. LANDING PAGE BUILDER
+Create a modular landing page builder with:
+- hero
+- benefits
+- testimonials
+- offer section
+- FAQ
+- CTA blocks
+- contact form
+- booking form placeholders
+- mobile responsiveness
+- SEO controls
+- analytics hooks
+- custom domain readiness
+
+Allow page publishing with tenant isolation and future support for branded domains.
+
+8. CONTENT CALENDAR
+Provide a calendar view to plan:
+- social posts
+- emails
+- launches
+- promotions
+- ads
+- seasonal campaigns
+
+Include status:
+- idea
+- draft
+- approved
+- scheduled
+- published
+
+9. ANALYTICS DASHBOARD
+Create dashboards showing:
+- campaign status
+- content output
+- AI credit usage
+- top-performing assets
+- landing page conversions
+- channel performance placeholders
+- ROI estimates
+- team activity
+
+Architecture should be ready for real integrations later.
+
+10. APPROVALS & COLLABORATION
+Include:
+- comments
+- version history
+- approval requests
+- role-based editing
+- client-friendly review mode
+- shared links with scoped permissions
+
+11. TEMPLATE MARKETPLACE FOUNDATIONS
+Structure the app so templates can later be sold or shared.
+Template types:
+- campaigns
+- brand kits
+- social packs
+- landing pages
+- ad packs
+- email sequences
+
+12. ADMIN / SUPER ADMIN
+Add a platform admin area for:
+- tenants
+- subscriptions
+- usage
+- support flags
+- moderation/reporting
+- system metrics
+- feature flags
+
+UX / UI DIRECTION
+The app should feel premium, clear, fast, and conversion-focused.
+Design language:
+- polished SaaS
+- modern dashboard aesthetic
+- dark/light mode
+- elegant cards and tables
+- crisp onboarding
+- visual workflow clarity
+- minimal clutter
+- excellent empty states
+- clear upgrade prompts
+- beautiful charting
+- high-end founder-tool energy
+
+PAGES TO BUILD
+- Marketing website / homepage
+- Features page
+- Pricing page
+- Login / signup
+- Onboarding
+- Dashboard
+- Brand HQ
+- Strategy workspace
+- Creative Studio
+- Copy Studio
+- Campaign builder
+- Content calendar
+- Landing page builder
+- Analytics
+- Billing/settings
+- Admin panel
+
+MARKETING SITE REQUIREMENTS
+Homepage should clearly explain:
+- what the product does
+- who it is for
+- why it is different
+- how it helps go from zero to hero
+- plan comparison
+- testimonials placeholders
+- FAQ
+- CTA for free signup and demo
+
+IMPORTANT PRODUCT DIFFERENTIATORS
+Make the product stand out by emphasizing:
+- guided workflow, not just raw AI prompts
+- multi-tenant/client-ready architecture
+- brand-safe outputs
+- campaign orchestration
+- built-in design tooling
+- reusable templates
+- small-business-friendly UX
+- agency scalability
+
+DATA MODEL
+Design a clean Prisma schema with entities like:
+- User
+- Tenant
+- Membership
+- Subscription
+- Brand
+- Persona
+- Offer
+- Campaign
+- CampaignAsset
+- CopyAsset
+- DesignAsset
+- LandingPage
+- Template
+- Comment
+- ApprovalRequest
+- AuditLog
+- UsageRecord
+- Integration
+- Notification
+
+IMPLEMENTATION NOTES
+- Seed demo data
+- Add feature gating logic by plan
+- Add clean empty states and onboarding nudges
+- Add robust settings pages
+- Add mock analytics if real integrations are not yet connected
+- Add clean error handling
+- Add scalable service abstraction for AI providers
+- Keep code modular and production-oriented
+- Include README with setup, architecture, and environment variable instructions
+- Include comments explaining major systems for future development
+
+DELIVERABLE
+Produce a polished MVP that is fully navigable, logically connected, visually impressive, and ready to continue toward production.
+Do not make it a shallow mockup. Build real flows, real plan gating, real tenant-aware architecture, and strong reusable component structure.

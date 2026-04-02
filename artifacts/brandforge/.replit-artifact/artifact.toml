@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "BrandForge OS"
+version = "1.0.0"
+id = "artifacts/brandforge"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25356
+
+[services.development]
+run = "pnpm --filter @workspace/brandforge run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/brandforge", "run", "build" ]
+publicDir = "artifacts/brandforge/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25356"
+BASE_PATH = "/"

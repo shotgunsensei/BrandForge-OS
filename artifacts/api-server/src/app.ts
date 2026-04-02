@@ -1,6 +1,8 @@
 import express, { type Express } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import pinoHttp from "pino-http";
+import { authMiddleware } from "./middlewares/authMiddleware";
 import router from "./routes";
 import { logger } from "./lib/logger";
 
@@ -25,9 +27,24 @@ app.use(
     },
   }),
 );
-app.use(cors());
-app.use(express.json());
+const allowedOrigins = [
+  process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : "",
+  process.env.REPLIT_DOMAINS ? `https://${process.env.REPLIT_DOMAINS.split(",")[0]}` : "",
+].filter(Boolean);
+app.use(cors({
+  credentials: true,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.some(allowed => origin.startsWith(allowed.replace(/:\d+$/, "")))) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+}));
+app.use(cookieParser());
+app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
+app.use(authMiddleware);
 
 app.use("/api", router);
 
