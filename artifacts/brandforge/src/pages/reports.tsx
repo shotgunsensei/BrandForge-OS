@@ -10,25 +10,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import {
   FileText, Download, Plus, BarChart3, TrendingUp, Users,
-  Megaphone, PenTool, Eye, Palette, ArrowUpRight, Lock, CheckCircle2
+  Megaphone, PenTool, Eye, Palette, ArrowUpRight, Lock, CheckCircle2, Crown
 } from "lucide-react";
 
 const reportTypes = [
-  { value: "campaign_summary", label: "Campaign Summary", icon: Megaphone, description: "Performance overview of selected campaigns" },
-  { value: "content_performance", label: "Content Performance", icon: PenTool, description: "Analysis of copy and content effectiveness" },
-  { value: "channel_breakdown", label: "Channel Breakdown", icon: BarChart3, description: "Performance metrics by marketing channel" },
-  { value: "executive_summary", label: "Executive Summary", icon: TrendingUp, description: "High-level KPI overview for stakeholders" },
-  { value: "team_activity", label: "Team Activity", icon: Users, description: "Team member contributions and activity" },
-  { value: "brand_health", label: "Brand Health", icon: Palette, description: "Brand consistency and usage metrics" },
-];
-
-const kpiBlocks = [
-  { label: "Total Impressions", value: "127,450", change: "+12.4%", positive: true },
-  { label: "Click-Through Rate", value: "3.8%", change: "+0.6%", positive: true },
-  { label: "Conversions", value: "1,234", change: "+8.2%", positive: true },
-  { label: "Cost Per Acquisition", value: "$24.50", change: "-5.1%", positive: true },
-  { label: "Revenue Generated", value: "$45,600", change: "+15.3%", positive: true },
-  { label: "ROAS", value: "3.2x", change: "+0.4x", positive: true },
+  { value: "campaign_summary", label: "Campaign Summary", icon: Megaphone, description: "Performance overview of selected campaigns with impressions, clicks, and conversions" },
+  { value: "content_performance", label: "Content Performance", icon: PenTool, description: "Analysis of copy and content effectiveness across channels" },
+  { value: "channel_breakdown", label: "Channel Breakdown", icon: BarChart3, description: "Performance metrics segmented by marketing channel" },
+  { value: "executive_summary", label: "Executive Summary", icon: TrendingUp, description: "High-level KPI overview for leadership and stakeholders" },
+  { value: "team_activity", label: "Team Activity", icon: Users, description: "Team member contributions, output volume, and activity trends" },
+  { value: "brand_health", label: "Brand Health", icon: Palette, description: "Brand consistency score, voice adherence, and usage metrics" },
 ];
 
 export default function ReportsPage() {
@@ -92,7 +83,7 @@ export default function ReportsPage() {
 
             {reports && reports.length > 0 && (
               <Card>
-                <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Recent Reports</CardTitle></CardHeader>
+                <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Your Reports</CardTitle></CardHeader>
                 <CardContent className="space-y-2">
                   {reports.map((r: any) => (
                     <div key={r.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
@@ -105,7 +96,11 @@ export default function ReportsPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge variant={r.status === "generated" ? "secondary" : "outline"} className="text-[10px] capitalize">{r.status}</Badge>
-                        {r.isWhiteLabel && <Lock className="h-3 w-3 text-purple-500" />}
+                        {r.isWhiteLabel && (
+                          <Badge variant="secondary" className="text-[10px] bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                            <Crown className="h-2.5 w-2.5 mr-0.5" /> White-Label
+                          </Badge>
+                        )}
                         {r.status !== "generated" && (
                           <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => generateReport.mutate(r.id)}>
                             Generate
@@ -120,38 +115,75 @@ export default function ReportsPage() {
                 </CardContent>
               </Card>
             )}
+
+            {(!reports || reports.length === 0) && (
+              <Card>
+                <CardContent className="py-10 text-center">
+                  <FileText className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
+                  <p className="font-medium text-sm mb-1">No reports created yet</p>
+                  <p className="text-xs text-muted-foreground mb-4">Choose a report type above to create your first performance report.</p>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="preview" className="mt-6">
-            <Card className="border-2 border-dashed">
-              <CardContent className="pt-6 space-y-6">
-                <div className="text-center space-y-2">
-                  <div className="w-12 h-12 rounded-xl gradient-brand flex items-center justify-center text-white font-bold mx-auto">B</div>
-                  <h2 className="text-xl font-bold">Campaign Performance Report</h2>
-                  <p className="text-sm text-muted-foreground">Generated {new Date().toLocaleDateString()} — Last 30 days</p>
+            <Card className="overflow-hidden">
+              <div className="bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-6 text-white">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white font-bold">B</div>
+                  <div>
+                    <div className="text-xs text-white/60 uppercase tracking-wider">BrandForge Report</div>
+                    <h2 className="text-xl font-bold">Campaign Performance Report</h2>
+                  </div>
                 </div>
+                <div className="flex items-center gap-4 text-sm text-white/70">
+                  <span>Generated {new Date().toLocaleDateString()}</span>
+                  <span>Last 30 days</span>
+                </div>
+              </div>
+              <CardContent className="pt-6 space-y-6">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {kpiBlocks.map(kpi => (
+                  {[
+                    { label: "Total Impressions", value: "—", change: "—" },
+                    { label: "Click-Through Rate", value: "—", change: "—" },
+                    { label: "Conversions", value: "—", change: "—" },
+                    { label: "Cost Per Acquisition", value: "—", change: "—" },
+                    { label: "Revenue Generated", value: "—", change: "—" },
+                    { label: "ROAS", value: "—", change: "—" },
+                  ].map(kpi => (
                     <div key={kpi.label} className="p-4 bg-muted/30 rounded-xl text-center">
-                      <div className="text-2xl font-bold">{kpi.value}</div>
+                      <div className="text-2xl font-bold text-muted-foreground/40">{kpi.value}</div>
                       <div className="text-xs text-muted-foreground mt-1">{kpi.label}</div>
-                      <div className={`text-xs font-medium mt-1 ${kpi.positive ? "text-green-600" : "text-red-600"}`}>{kpi.change}</div>
+                      <div className="text-xs text-muted-foreground/50 mt-0.5">{kpi.change}</div>
                     </div>
                   ))}
                 </div>
-                <div className="bg-muted/30 rounded-xl p-4 h-40 flex items-center justify-center text-muted-foreground text-sm">
-                  Campaign performance chart placeholder
+                <div className="bg-muted/30 rounded-xl p-6">
+                  <div className="text-xs font-medium text-muted-foreground mb-3">Performance Trend</div>
+                  <div className="flex items-end gap-[4px] h-28">
+                    {[32,45,38,52,28,60,55,42,68,50,35,72,48,58,40,65,52,45,75,55,62,48,70,42,58,65,50,78,60,72].map((h, i) => (
+                      <div key={i} className="flex-1 bg-primary/20 rounded-t-sm" style={{ height: `${h}%` }} />
+                    ))}
+                  </div>
+                  <div className="flex justify-between text-[10px] text-muted-foreground mt-2">
+                    <span>30 days ago</span>
+                    <span>Today</span>
+                  </div>
                 </div>
                 <div className="bg-muted/30 rounded-xl p-4">
                   <h3 className="font-semibold text-sm mb-3">AI Recommendations</h3>
                   <div className="space-y-2">
-                    {["Increase ad spend on Google Ads — CTR is 2x above average", "Test video creatives for Meta campaigns — competitors seeing 40% higher engagement", "Shift budget from LinkedIn to TikTok for younger demographic targeting"].map((rec, i) => (
+                    {["Increase ad spend on top-performing channels — CTR is above average", "Test video creatives for social campaigns — video tends to drive higher engagement", "Create retargeting sequences for visitors who didn't convert"].map((rec, i) => (
                       <div key={i} className="flex items-start gap-2 text-sm">
                         <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
                         <span className="text-muted-foreground">{rec}</span>
                       </div>
                     ))}
                   </div>
+                </div>
+                <div className="text-center text-xs text-muted-foreground py-2 border-t">
+                  <p>Report data populates from your live campaigns and analytics. Create a report to generate real KPIs.</p>
                 </div>
               </CardContent>
             </Card>
@@ -162,7 +194,11 @@ export default function ReportsPage() {
               <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Export History</CardTitle></CardHeader>
               <CardContent className="space-y-2">
                 {(!exports || exports.length === 0) && (
-                  <p className="text-sm text-muted-foreground text-center py-8">No exports yet. Generate a report and export it as PDF.</p>
+                  <div className="text-center py-8">
+                    <Download className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground mb-1">No exports yet</p>
+                    <p className="text-xs text-muted-foreground">Generate a report, then export it as PDF to share with clients or stakeholders.</p>
+                  </div>
                 )}
                 {(exports || []).map((e: any) => (
                   <div key={e.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
@@ -209,14 +245,16 @@ export default function ReportsPage() {
                     onChange={e => setNewReport({ ...newReport, isWhiteLabel: e.target.checked })}
                     className="rounded"
                   />
-                  <Label className="text-xs">White-label report (custom branding)</Label>
-                  <Badge variant="secondary" className="text-[10px] ml-auto">Agency+</Badge>
+                  <Label className="text-xs">White-label report (use your client's branding)</Label>
+                  <Badge variant="secondary" className="text-[10px] ml-auto">
+                    <Crown className="h-2.5 w-2.5 mr-0.5" /> Agency
+                  </Badge>
                 </div>
                 {newReport.isWhiteLabel && (
                   <div className="space-y-3 pl-4 border-l-2 border-purple-200">
                     <div>
-                      <Label className="text-xs">Company Name</Label>
-                      <Input value={newReport.brandingCompanyName} onChange={e => setNewReport({ ...newReport, brandingCompanyName: e.target.value })} placeholder="Your Client's Company" className="mt-1" />
+                      <Label className="text-xs">Client Company Name</Label>
+                      <Input value={newReport.brandingCompanyName} onChange={e => setNewReport({ ...newReport, brandingCompanyName: e.target.value })} placeholder="Acme Corp" className="mt-1" />
                     </div>
                     <div>
                       <Label className="text-xs">Brand Color</Label>

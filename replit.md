@@ -144,6 +144,18 @@ Authenticated pages (all use AppLayout with sidebar):
 - `/admin` - Admin console with overview KPIs, tenant list/search, feature flags management, integration health
 - `/reports` - Report builder with 6 report types, white-label branding, create/generate/export, KPI preview
 
+## Launch Readiness
+
+- All fake/placeholder data removed from charts and metrics — everything derived from real API or shows proper empty states
+- Contextual empty states on every page with specific guidance and clear CTAs
+- Filtered empty states in Templates and Integrations with "Clear Filters" action
+- Report preview chart uses deterministic data (not Math.random)
+- Plan feature names consistent between home page and pricing page
+- Security/compliance claims verified and softened where unverifiable (e.g. "Enterprise Security" not "SOC 2 Compliant")
+- Negative remaining credits edge case handled with Math.max(0, ...)
+- Upgrade CTAs use Crown icon with contextual per-feature text
+- Dashboard contextual actions derived from actual user state (hasBrands, hasCopy, hasCampaigns, creditPercent)
+
 ## Design System
 
 - Premium gradient brand palette (`gradient-brand`, `gradient-brand-text` CSS utilities)

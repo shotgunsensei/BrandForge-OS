@@ -80,7 +80,26 @@ export default function IntegrationsPage() {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-20 text-muted-foreground">Loading integrations...</div>
+          <div className="text-center py-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1,2,3,4,5,6].map(i => <div key={i} className="h-48 bg-muted rounded-xl animate-pulse" />)}
+            </div>
+          </div>
+        ) : filtered.length === 0 && !search && categoryFilter === "all" ? (
+          <div className="text-center py-16">
+            <Plug className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
+            <p className="font-medium text-sm mb-1">No integrations available</p>
+            <p className="text-xs text-muted-foreground">Integrations will appear here as they become available for your plan.</p>
+          </div>
+        ) : filtered.length === 0 && (search || categoryFilter !== "all") ? (
+          <div className="text-center py-16">
+            <Search className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
+            <p className="font-medium text-sm mb-1">No integrations match your filters</p>
+            <p className="text-xs text-muted-foreground mb-4">Try a different search term or category.</p>
+            <Button variant="outline" size="sm" className="rounded-full" onClick={() => { setSearch(""); setCategoryFilter("all"); }}>
+              Clear Filters
+            </Button>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map((int: any) => (
@@ -169,7 +188,9 @@ export default function IntegrationsPage() {
 
                   <div className="flex items-center justify-between pt-1 border-t">
                     <Badge variant="outline" className="text-[10px]">{categoryLabels[int.category] || int.category}</Badge>
-                    <span className="text-[10px] text-muted-foreground">{int.requiredPlan}+ plan</span>
+                    {int.requiredPlan && int.requiredPlan !== "free" && (
+                      <span className="text-[10px] text-muted-foreground capitalize">{int.requiredPlan}+ required</span>
+                    )}
                   </div>
                 </CardContent>
               </Card>

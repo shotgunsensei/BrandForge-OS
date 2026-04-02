@@ -3,27 +3,13 @@ import { useTenant } from "@/lib/tenant-context";
 import { useGetAnalytics } from "@workspace/api-client-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 import {
   TrendingUp, TrendingDown, Zap, PenTool, Megaphone, BarChart3,
   Lightbulb, AlertTriangle, ArrowUpRight, Eye, MousePointerClick, Target,
-  Sparkles,
+  Sparkles, FileText, Crown
 } from "lucide-react";
-
-const aiRecommendations = [
-  { icon: AlertTriangle, text: "Your landing page is missing proof elements — add testimonials or case studies", type: "warning" },
-  { icon: Lightbulb, text: "Try shorter hook variants for paid ads — under 6 words tend to perform 2x better", type: "tip" },
-  { icon: TrendingUp, text: "Create retargeting variants for your best-performing copy assets", type: "growth" },
-  { icon: AlertTriangle, text: "You haven't published any content in the last 8 days", type: "warning" },
-  { icon: Lightbulb, text: "Your audience targeting seems too broad for the current offer — try narrowing to 2-3 specific segments", type: "tip" },
-  { icon: Target, text: "This campaign has no clear CTA — adding a specific CTA could improve conversions by 30%", type: "growth" },
-];
-
-const mockMetrics = [
-  { label: "Total Impressions", value: "47.2K", change: "+12.4%", up: true, icon: Eye },
-  { label: "Total Clicks", value: "3,841", change: "+8.7%", up: true, icon: MousePointerClick },
-  { label: "Avg. Conversion", value: "3.2%", change: "-0.4%", up: false, icon: Target },
-  { label: "Content Produced", value: "156", change: "+24", up: true, icon: PenTool },
-];
 
 export default function Analytics() {
   const { tenantId } = useTenant();
@@ -43,30 +29,72 @@ export default function Analytics() {
 
   const maxContent = Math.max(...(analytics.contentOutput?.map((d: any) => d.value) || [1]));
   const maxAi = Math.max(...(analytics.aiUsageTrend?.map((d: any) => d.value) || [1]));
+  const totalContent = analytics.contentOutput?.reduce((s: number, d: any) => s + d.value, 0) || 0;
+  const totalAiUsage = analytics.aiUsageTrend?.reduce((s: number, d: any) => s + d.value, 0) || 0;
+  const campaignCount = analytics.campaignPerformance?.length || 0;
+  const channelCount = analytics.channelBreakdown?.length || 0;
+
+  const hasData = totalContent > 0 || totalAiUsage > 0 || campaignCount > 0;
+
+  const liveMetrics = [
+    { label: "Content Produced", value: totalContent, icon: PenTool, change: totalContent > 0 ? `${totalContent} items` : "No data yet", up: true },
+    { label: "AI Sessions", value: totalAiUsage, icon: Zap, change: totalAiUsage > 0 ? `${totalAiUsage} credits used` : "No usage yet", up: true },
+    { label: "Active Campaigns", value: campaignCount, icon: Megaphone, change: campaignCount > 0 ? `Across ${channelCount} channels` : "Launch to track", up: campaignCount > 0 },
+    { label: "Channels Active", value: channelCount, icon: Target, change: channelCount > 0 ? "With content" : "Assign channels", up: channelCount > 0 },
+  ];
+
+  const contextualInsights = [];
+  if (!hasData) {
+    contextualInsights.push({ icon: Lightbulb, text: "Start creating content and running campaigns to see performance data here", type: "tip" });
+    contextualInsights.push({ icon: Target, text: "Set up your brand identity first — it helps the AI generate better, more targeted copy", type: "tip" });
+  } else {
+    if (channelCount === 1) {
+      contextualInsights.push({ icon: Lightbulb, text: "You're only using one channel. Expanding to 2-3 channels typically improves reach by 40%.", type: "tip" });
+    }
+    if (totalAiUsage > 0 && totalContent === 0) {
+      contextualInsights.push({ icon: AlertTriangle, text: "You've used AI credits but haven't published content yet. Publish your drafts to start measuring performance.", type: "warning" });
+    }
+    if (campaignCount > 0) {
+      contextualInsights.push({ icon: TrendingUp, text: "Create retargeting variants for your top-performing campaigns to maximize ROI", type: "growth" });
+    }
+    if (totalContent > 10) {
+      contextualInsights.push({ icon: Lightbulb, text: "You have enough content data for a performance report. Export one from Reports to share with stakeholders.", type: "tip" });
+    }
+    contextualInsights.push({ icon: Target, text: "Add clear CTAs to any campaigns missing them — this can improve conversion by 30%", type: "growth" });
+    contextualInsights.push({ icon: Lightbulb, text: "Try shorter ad hooks (under 6 words) for paid channels — they tend to outperform longer variants", type: "tip" });
+  }
 
   return (
     <AppLayout>
       <div className="p-6 lg:p-8 space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground text-sm">Track performance and get AI-powered insights</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
+            <p className="text-muted-foreground text-sm">Track performance and get AI-powered insights</p>
+          </div>
+          <Button variant="outline" size="sm" asChild className="rounded-full">
+            <Link href="/reports"><FileText className="h-3.5 w-3.5 mr-1.5" /> Export Report</Link>
+          </Button>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {mockMetrics.map(m => (
+          {liveMetrics.map(m => (
             <Card key={m.label} className="hover:shadow-sm transition-shadow">
               <CardContent className="pt-5 pb-4 px-5">
                 <div className="flex items-center justify-between mb-3">
                   <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                     <m.icon className="h-4 w-4" />
                   </div>
-                  <Badge variant="secondary" className={`text-[10px] ${m.up ? "text-green-600" : "text-red-500"}`}>
-                    {m.up ? <TrendingUp className="h-3 w-3 mr-0.5" /> : <TrendingDown className="h-3 w-3 mr-0.5" />}
-                    {m.change}
-                  </Badge>
+                  {m.value > 0 && (
+                    <Badge variant="secondary" className="text-[10px] text-green-600">
+                      <TrendingUp className="h-3 w-3 mr-0.5" />
+                      Active
+                    </Badge>
+                  )}
                 </div>
                 <div className="text-2xl font-bold tracking-tight">{m.value}</div>
                 <div className="text-xs text-muted-foreground mt-0.5">{m.label}</div>
+                <div className="text-[11px] text-muted-foreground/70 mt-1">{m.change}</div>
               </CardContent>
             </Card>
           ))}
@@ -78,55 +106,77 @@ export default function Analytics() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base font-semibold">Content Output (30 days)</CardTitle>
-                  <Badge variant="outline" className="text-[10px]">Daily</Badge>
+                  <Badge variant="outline" className="text-[10px]">{totalContent} total</Badge>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="flex items-end gap-[3px] h-44">
-                  {analytics.contentOutput?.map((d: any, i: number) => (
-                    <div key={i} className="flex-1 flex flex-col justify-end group relative">
-                      <div
-                        className="bg-primary/70 hover:bg-primary rounded-t-sm min-h-[2px] transition-colors cursor-default"
-                        style={{ height: `${maxContent > 0 ? (d.value / maxContent) * 100 : 0}%` }}
-                      />
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                        {d.date}: {d.value}
-                      </div>
+                {totalContent === 0 ? (
+                  <div className="h-44 flex items-center justify-center text-center">
+                    <div>
+                      <PenTool className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">Content data will appear here as you create and publish assets.</p>
                     </div>
-                  ))}
-                </div>
-                <div className="flex justify-between text-[11px] text-muted-foreground mt-2 px-1">
-                  <span>{analytics.contentOutput?.[0]?.date}</span>
-                  <span>{analytics.contentOutput?.[analytics.contentOutput.length - 1]?.date}</span>
-                </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-end gap-[3px] h-44">
+                      {analytics.contentOutput?.map((d: any, i: number) => (
+                        <div key={i} className="flex-1 flex flex-col justify-end group relative">
+                          <div
+                            className="bg-primary/70 hover:bg-primary rounded-t-sm min-h-[2px] transition-colors cursor-default"
+                            style={{ height: `${maxContent > 0 ? (d.value / maxContent) * 100 : 0}%` }}
+                          />
+                          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                            {d.date}: {d.value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex justify-between text-[11px] text-muted-foreground mt-2 px-1">
+                      <span>{analytics.contentOutput?.[0]?.date}</span>
+                      <span>{analytics.contentOutput?.[analytics.contentOutput.length - 1]?.date}</span>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base font-semibold">AI Credits Usage (30 days)</CardTitle>
-                  <Badge variant="outline" className="text-[10px]">Daily</Badge>
+                  <CardTitle className="text-base font-semibold">AI Credit Usage (30 days)</CardTitle>
+                  <Badge variant="outline" className="text-[10px]">{totalAiUsage} credits</Badge>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="flex items-end gap-[3px] h-36">
-                  {analytics.aiUsageTrend?.map((d: any, i: number) => (
-                    <div key={i} className="flex-1 flex flex-col justify-end group relative">
-                      <div
-                        className="bg-violet-500/70 hover:bg-violet-500 rounded-t-sm min-h-[2px] transition-colors cursor-default"
-                        style={{ height: `${maxAi > 0 ? (d.value / maxAi) * 100 : 0}%` }}
-                      />
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                        {d.date}: {d.value}
-                      </div>
+                {totalAiUsage === 0 ? (
+                  <div className="h-36 flex items-center justify-center text-center">
+                    <div>
+                      <Zap className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">Use the AI Copy Studio or Workflows to see credit usage trends.</p>
                     </div>
-                  ))}
-                </div>
-                <div className="flex justify-between text-[11px] text-muted-foreground mt-2 px-1">
-                  <span>{analytics.aiUsageTrend?.[0]?.date}</span>
-                  <span>{analytics.aiUsageTrend?.[analytics.aiUsageTrend.length - 1]?.date}</span>
-                </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-end gap-[3px] h-36">
+                      {analytics.aiUsageTrend?.map((d: any, i: number) => (
+                        <div key={i} className="flex-1 flex flex-col justify-end group relative">
+                          <div
+                            className="bg-violet-500/70 hover:bg-violet-500 rounded-t-sm min-h-[2px] transition-colors cursor-default"
+                            style={{ height: `${maxAi > 0 ? (d.value / maxAi) * 100 : 0}%` }}
+                          />
+                          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                            {d.date}: {d.value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex justify-between text-[11px] text-muted-foreground mt-2 px-1">
+                      <span>{analytics.aiUsageTrend?.[0]?.date}</span>
+                      <span>{analytics.aiUsageTrend?.[analytics.aiUsageTrend.length - 1]?.date}</span>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
 
@@ -136,11 +186,14 @@ export default function Analytics() {
                   <CardTitle className="text-base font-semibold">Channel Performance</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {analytics.channelBreakdown?.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-6">No channel data yet</p>
+                  {!analytics.channelBreakdown || analytics.channelBreakdown.length === 0 ? (
+                    <div className="text-center py-6">
+                      <BarChart3 className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">Assign channels to campaigns to see breakdown data.</p>
+                    </div>
                   ) : (
                     <div className="space-y-3">
-                      {analytics.channelBreakdown?.map((ch: any) => {
+                      {analytics.channelBreakdown.map((ch: any) => {
                         const max = Math.max(...(analytics.channelBreakdown?.map((c: any) => c.count) || [1]));
                         return (
                           <div key={ch.channel}>
@@ -165,7 +218,10 @@ export default function Analytics() {
                 </CardHeader>
                 <CardContent>
                   {!analytics.campaignPerformance || analytics.campaignPerformance.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-6">Run campaigns to see performance data</p>
+                    <div className="text-center py-6">
+                      <Megaphone className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">Launch campaigns to track impressions, clicks, and conversions.</p>
+                    </div>
                   ) : (
                     <div className="space-y-4">
                       {analytics.campaignPerformance.map((cp: any, i: number) => (
@@ -192,12 +248,12 @@ export default function Analytics() {
                   <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
                     <Sparkles className="h-4 w-4 text-amber-500" />
                   </div>
-                  <CardTitle className="text-base font-semibold">AI Recommendations</CardTitle>
+                  <CardTitle className="text-base font-semibold">AI Insights</CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {aiRecommendations.map((rec, i) => (
-                  <div key={i} className="flex items-start gap-2.5 p-2.5 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-default">
+              <CardContent className="space-y-2.5">
+                {contextualInsights.slice(0, 5).map((rec, i) => (
+                  <div key={i} className="flex items-start gap-2.5 p-2.5 bg-muted/30 rounded-lg">
                     <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 mt-0.5 ${
                       rec.type === "warning" ? "bg-yellow-500/10 text-yellow-600" :
                       rec.type === "tip" ? "bg-blue-500/10 text-blue-500" :
@@ -217,9 +273,9 @@ export default function Analytics() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {[
-                  { label: "Active Campaigns", value: analytics.campaignPerformance?.length || 0, icon: Megaphone },
-                  { label: "Total Assets", value: analytics.contentOutput?.reduce((s: number, d: any) => s + d.value, 0) || 0, icon: PenTool },
-                  { label: "AI Sessions", value: analytics.aiUsageTrend?.reduce((s: number, d: any) => s + d.value, 0) || 0, icon: Zap },
+                  { label: "Active Campaigns", value: campaignCount, icon: Megaphone },
+                  { label: "Total Assets", value: totalContent, icon: PenTool },
+                  { label: "AI Sessions", value: totalAiUsage, icon: Zap },
                 ].map(s => (
                   <div key={s.label} className="flex items-center justify-between p-2.5 bg-muted/30 rounded-lg">
                     <div className="flex items-center gap-2.5">
@@ -237,4 +293,3 @@ export default function Analytics() {
     </AppLayout>
   );
 }
-

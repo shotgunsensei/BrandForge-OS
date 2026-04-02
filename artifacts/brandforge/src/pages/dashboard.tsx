@@ -7,14 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import {
   Palette, Megaphone, PenTool, Calendar, Zap, TrendingUp,
-  ArrowRight, Lightbulb, AlertTriangle, ArrowUpRight, Plus,
+  ArrowRight, Lightbulb, ArrowUpRight, Plus, Sparkles,
+  Crown, Target, BarChart3
 } from "lucide-react";
-
-const recommendations = [
-  { icon: Lightbulb, text: "Create your first brand to unlock AI-powered copy generation", action: "/brands", priority: "high" },
-  { icon: AlertTriangle, text: "You haven't published any content in the last 7 days", action: "/calendar", priority: "medium" },
-  { icon: TrendingUp, text: "Try shorter hook variants for your paid ad campaigns", action: "/copy-studio", priority: "low" },
-];
 
 export default function Dashboard() {
   const { tenantId } = useTenant();
@@ -41,13 +36,41 @@ export default function Dashboard() {
 
   const creditPercent = dashboard.aiCreditsLimit > 0 ? Math.round((dashboard.aiCreditsUsed / dashboard.aiCreditsLimit) * 100) : 0;
   const creditColor = creditPercent > 80 ? "text-red-500" : creditPercent > 50 ? "text-yellow-500" : "text-green-500";
+  const remaining = Math.max(0, dashboard.aiCreditsLimit - dashboard.aiCreditsUsed);
+
+  const hasBrands = dashboard.totalBrands > 0;
+  const hasCampaigns = dashboard.totalCampaigns > 0;
+  const hasCopy = dashboard.totalCopyAssets > 0;
 
   const stats = [
-    { label: "Total Brands", value: dashboard.totalBrands, icon: Palette, color: "bg-violet-500/10 text-violet-500", change: "+2 this month" },
-    { label: "Active Campaigns", value: dashboard.activeCampaigns, icon: Megaphone, color: "bg-blue-500/10 text-blue-500", change: `${dashboard.totalCampaigns} total` },
-    { label: "Copy Assets", value: dashboard.totalCopyAssets, icon: PenTool, color: "bg-orange-500/10 text-orange-500", change: "Across all brands" },
-    { label: "AI Credits", value: `${dashboard.aiCreditsUsed}`, icon: Zap, color: "bg-amber-500/10 text-amber-500", change: `of ${dashboard.aiCreditsLimit} used` },
+    { label: "Brands", value: dashboard.totalBrands, icon: Palette, color: "bg-violet-500/10 text-violet-500", sub: hasBrands ? "Active" : "Set up your first brand" },
+    { label: "Campaigns", value: dashboard.activeCampaigns, icon: Megaphone, color: "bg-blue-500/10 text-blue-500", sub: hasCampaigns ? `${dashboard.totalCampaigns} total` : "Launch a campaign" },
+    { label: "Copy Assets", value: dashboard.totalCopyAssets, icon: PenTool, color: "bg-orange-500/10 text-orange-500", sub: hasCopy ? "Across all brands" : "Generate with AI" },
+    { label: "AI Credits", value: `${dashboard.aiCreditsUsed}/${dashboard.aiCreditsLimit}`, icon: Zap, color: "bg-amber-500/10 text-amber-500", sub: remaining > 0 ? `${remaining} remaining` : "Upgrade for more" },
   ];
+
+  const contextualActions = [];
+  if (!hasBrands) {
+    contextualActions.push({ icon: Target, text: "Set up your brand identity to unlock AI-powered copy generation", action: "/brands", priority: "high" as const });
+  }
+  if (hasBrands && !hasCopy) {
+    contextualActions.push({ icon: PenTool, text: "Generate your first AI copy — ads, emails, or social posts", action: "/copy-studio", priority: "high" as const });
+  }
+  if (hasBrands && hasCopy && !hasCampaigns) {
+    contextualActions.push({ icon: Megaphone, text: "Create a campaign to organize and launch your content", action: "/campaigns", priority: "medium" as const });
+  }
+  if (hasCampaigns && dashboard.upcomingCalendarItems.length === 0) {
+    contextualActions.push({ icon: Calendar, text: "Schedule your content to keep publishing consistent", action: "/calendar", priority: "medium" as const });
+  }
+  if (creditPercent > 70) {
+    contextualActions.push({ icon: Crown, text: `You've used ${creditPercent}% of your AI credits this cycle`, action: "/settings", priority: creditPercent > 90 ? "high" as const : "medium" as const });
+  }
+  if (hasBrands && hasCampaigns) {
+    contextualActions.push({ icon: Lightbulb, text: "Check Analytics for AI-powered insights on your campaigns", action: "/analytics", priority: "low" as const });
+  }
+  if (contextualActions.length === 0) {
+    contextualActions.push({ icon: Sparkles, text: "You're all caught up. Explore AI Workflows to accelerate your next launch.", action: "/ai-workflows", priority: "low" as const });
+  }
 
   return (
     <AppLayout>
@@ -78,7 +101,7 @@ export default function Dashboard() {
                 </div>
                 <div className="text-2xl font-bold tracking-tight">{stat.value}</div>
                 <div className="text-xs text-muted-foreground mt-0.5">{stat.label}</div>
-                <div className="text-[11px] text-muted-foreground/70 mt-1">{stat.change}</div>
+                <div className="text-[11px] text-muted-foreground/70 mt-1">{stat.sub}</div>
               </CardContent>
             </Card>
           ))}
@@ -89,8 +112,17 @@ export default function Dashboard() {
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base font-semibold">AI Credits Usage</CardTitle>
-                  <Badge variant="secondary" className={`text-xs ${creditColor}`}>{creditPercent}% used</Badge>
+                  <CardTitle className="text-base font-semibold">AI Credits</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className={`text-xs ${creditColor}`}>{creditPercent}% used</Badge>
+                    {creditPercent > 80 && (
+                      <Button variant="outline" size="sm" asChild className="rounded-full text-xs h-7">
+                        <Link href="/settings">
+                          <Crown className="h-3 w-3 mr-1" /> Get More Credits
+                        </Link>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -101,8 +133,8 @@ export default function Dashboard() {
                   />
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{dashboard.aiCreditsUsed} credits used</span>
-                  <span className="font-medium">{dashboard.aiCreditsLimit - dashboard.aiCreditsUsed} remaining</span>
+                  <span className="text-muted-foreground">{dashboard.aiCreditsUsed} credits used this cycle</span>
+                  <span className="font-medium">{remaining} remaining</span>
                 </div>
               </CardContent>
             </Card>
@@ -110,17 +142,20 @@ export default function Dashboard() {
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base font-semibold">Campaign Status</CardTitle>
+                  <CardTitle className="text-base font-semibold">Campaigns</CardTitle>
                   <Link href="/campaigns" className="text-sm text-primary hover:underline flex items-center gap-1">View all <ArrowRight className="h-3 w-3" /></Link>
                 </div>
               </CardHeader>
               <CardContent>
                 {dashboard.campaignsByStatus.length === 0 ? (
                   <div className="py-8 text-center">
-                    <Megaphone className="h-10 w-10 mx-auto mb-3 text-muted-foreground/40" />
-                    <p className="text-sm text-muted-foreground mb-3">No campaigns yet</p>
-                    <Button size="sm" variant="outline" asChild className="rounded-full">
-                      <Link href="/campaigns">Create your first campaign</Link>
+                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mx-auto mb-3">
+                      <Megaphone className="h-6 w-6 text-blue-500" />
+                    </div>
+                    <p className="font-medium text-sm mb-1">No campaigns yet</p>
+                    <p className="text-xs text-muted-foreground mb-4">Campaigns help you organize and track your marketing efforts across channels.</p>
+                    <Button size="sm" asChild className="rounded-full">
+                      <Link href="/campaigns"><Plus className="h-3.5 w-3.5 mr-1" /> Create Campaign</Link>
                     </Button>
                   </div>
                 ) : (
@@ -139,17 +174,20 @@ export default function Dashboard() {
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base font-semibold">Recent Copy Assets</CardTitle>
+                  <CardTitle className="text-base font-semibold">Recent Copy</CardTitle>
                   <Link href="/copy-studio" className="text-sm text-primary hover:underline flex items-center gap-1">View all <ArrowRight className="h-3 w-3" /></Link>
                 </div>
               </CardHeader>
               <CardContent>
                 {dashboard.recentCopyAssets.length === 0 ? (
                   <div className="py-8 text-center">
-                    <PenTool className="h-10 w-10 mx-auto mb-3 text-muted-foreground/40" />
-                    <p className="text-sm text-muted-foreground mb-3">No copy assets yet</p>
-                    <Button size="sm" variant="outline" asChild className="rounded-full">
-                      <Link href="/copy-studio">Create with AI</Link>
+                    <div className="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center mx-auto mb-3">
+                      <PenTool className="h-6 w-6 text-orange-500" />
+                    </div>
+                    <p className="font-medium text-sm mb-1">No copy generated yet</p>
+                    <p className="text-xs text-muted-foreground mb-4">Use the AI Copy Studio to create ads, emails, social posts, and landing page copy.</p>
+                    <Button size="sm" asChild className="rounded-full">
+                      <Link href="/copy-studio"><Sparkles className="h-3.5 w-3.5 mr-1" /> Generate with AI</Link>
                     </Button>
                   </div>
                 ) : (
@@ -170,17 +208,22 @@ export default function Dashboard() {
           </div>
 
           <div className="space-y-6">
-            <Card>
+            <Card className="border-primary/20">
               <CardHeader className="pb-3">
-                <CardTitle className="text-base font-semibold">AI Recommendations</CardTitle>
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Sparkles className="h-3.5 w-3.5 text-primary" />
+                  </div>
+                  <CardTitle className="text-base font-semibold">Next Steps</CardTitle>
+                </div>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {recommendations.map((rec, i) => (
+              <CardContent className="space-y-2.5">
+                {contextualActions.slice(0, 4).map((rec, i) => (
                   <Link key={i} href={rec.action}>
                     <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer group">
                       <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
                         rec.priority === "high" ? "bg-red-500/10 text-red-500" :
-                        rec.priority === "medium" ? "bg-yellow-500/10 text-yellow-500" :
+                        rec.priority === "medium" ? "bg-amber-500/10 text-amber-600" :
                         "bg-blue-500/10 text-blue-500"
                       }`}>
                         <rec.icon className="h-3.5 w-3.5" />
@@ -188,7 +231,7 @@ export default function Dashboard() {
                       <div className="min-w-0">
                         <p className="text-sm leading-snug">{rec.text}</p>
                         <p className="text-xs text-primary mt-1 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-                          Take action <ArrowUpRight className="h-3 w-3" />
+                          Go <ArrowUpRight className="h-3 w-3" />
                         </p>
                       </div>
                     </div>
@@ -199,13 +242,13 @@ export default function Dashboard() {
 
             <Card>
               <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-base font-semibold">Activity Feed</CardTitle>
-                </div>
+                <CardTitle className="text-base font-semibold">Activity</CardTitle>
               </CardHeader>
               <CardContent>
                 {!activity || activity.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-4">No activity yet</p>
+                  <div className="text-center py-4">
+                    <p className="text-sm text-muted-foreground">Activity will appear here as you use BrandForge.</p>
+                  </div>
                 ) : (
                   <div className="space-y-3">
                     {activity.slice(0, 6).map((item: any) => (
@@ -232,7 +275,10 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 {dashboard.upcomingCalendarItems.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-4">Nothing scheduled</p>
+                  <div className="text-center py-4">
+                    <Calendar className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Schedule content from the Calendar to see it here.</p>
+                  </div>
                 ) : (
                   <div className="space-y-2">
                     {dashboard.upcomingCalendarItems.slice(0, 4).map((item: any) => (

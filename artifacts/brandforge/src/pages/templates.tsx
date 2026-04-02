@@ -16,7 +16,6 @@ const typeIcons: Record<string, any> = {
   content_calendar: Calendar, brand_kit: Palette, design_pack: Package,
 };
 
-const categories = ["all", "campaign", "copy", "landing_page", "email", "social", "brand", "design"];
 const categoryLabels: Record<string, string> = {
   all: "All", campaign: "Campaigns", copy: "Copy Packs", landing_page: "Landing Pages",
   email: "Email", social: "Social", brand: "Brand Kits", design: "Design",
@@ -47,6 +46,7 @@ export default function TemplatesPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
 
   const allTemplates = apiTemplates && apiTemplates.length > 0 ? apiTemplates : demoTemplates;
+  const categories = ["all", ...Array.from(new Set(allTemplates.map((t: any) => t.category)))];
 
   const filtered = allTemplates.filter((t: any) => {
     if (search && !t.name.toLowerCase().includes(search.toLowerCase()) && !t.description?.toLowerCase().includes(search.toLowerCase())) return false;
@@ -119,6 +119,16 @@ export default function TemplatesPage() {
           </div>
         </div>
 
+        {filtered.length === 0 ? (
+          <div className="text-center py-16">
+            <Search className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
+            <p className="font-medium text-sm mb-1">No templates match your filters</p>
+            <p className="text-xs text-muted-foreground mb-4">Try a different search term or category.</p>
+            <Button variant="outline" size="sm" className="rounded-full" onClick={() => { setSearch(""); setCategoryFilter("all"); setShowPremiumOnly(false); }}>
+              Clear Filters
+            </Button>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((t: any) => (
             <Card key={t.id} className={`group hover:shadow-md transition-all ${t.isPremium ? "border-purple-200/50 dark:border-purple-800/30" : ""}`}>
@@ -161,6 +171,7 @@ export default function TemplatesPage() {
             </Card>
           ))}
         </div>
+        )}
 
         {selectedTemplate && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={() => setSelectedTemplate(null)}>
