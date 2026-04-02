@@ -111,7 +111,7 @@ Phase 3 routes:
 - **Usage Summary**: `/api/tenants/:id/usage-summary` (GET)
 - **Integrations Hub**: `/api/tenants/:id/integrations` (GET), `/connect`, `/disconnect`, `/sync`, `/sync-history`
 - **Templates**: `/api/templates` (GET global), `/api/tenants/:id/templates` (GET/POST), `/:templateId/use` (POST)
-- **Admin**: `/api/admin/overview`, `/tenants`, `/feature-flags` (GET/PUT), `/integrations-health`
+- **Admin**: `/api/admin/overview`, `/tenants` (GET), `/tenants/:id` (GET/PUT/DELETE), `/tenants/:id/plan` (PUT), `/tenants/:id/credits` (PUT), `/feature-flags` (GET/PUT), `/integrations-health`
 - **Reports**: `/api/tenants/:id/reports` (GET/POST), `/:reportId/generate` (POST)
 - **Exports**: `/api/tenants/:id/exports` (GET/POST)
 - **Notifications**: `/api/tenants/:id/notifications` (GET), `/:id/read`, `/read-all`
@@ -143,7 +143,7 @@ Authenticated pages (all use AppLayout with sidebar):
 - `/settings` - Tabbed settings (workspace, billing with plan management, usage meters, add-on store, team with invite, security)
 - `/integrations` - Integrations hub with 12 providers, search/filter by category, connect/disconnect/sync
 - `/templates` - Template marketplace with featured templates, categories, premium badges, preview modal
-- `/admin` - Admin console with overview KPIs, tenant list/search, feature flags management, integration health
+- `/admin` - Super admin console with overview KPIs, tenant management (change plan, rename, suspend, delete, adjust credits), feature flags, integration health
 - `/reports` - Report builder with 6 report types, white-label branding, create/generate/export, KPI preview
 
 ## Launch Readiness
@@ -157,6 +157,7 @@ Authenticated pages (all use AppLayout with sidebar):
 - Negative remaining credits edge case handled with Math.max(0, ...)
 - Upgrade CTAs use Crown icon with contextual per-feature text
 - Dashboard contextual actions derived from actual user state (hasBrands, hasCopy, hasCampaigns, creditPercent)
+- Super admin role: `users.role = "super_admin"` checked by `requirePlatformAdmin` middleware; auto-promoted from `SUPER_ADMIN_EMAILS` config in `tenant-auth.ts`
 - Footer legal links route to real Privacy Policy and Terms of Service pages (not placeholder destinations)
 - Template usage counts only render when > 0 (no "undefined uses" display)
 - Templates page hides search/filter UI when no templates exist, shows clean empty state with CTA

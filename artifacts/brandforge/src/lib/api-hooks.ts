@@ -218,6 +218,64 @@ export function useAdminIntegrationsHealth() {
   });
 }
 
+export function useAdminTenantDetail(tenantId: number | null) {
+  return useQuery({
+    queryKey: ["admin-tenant-detail", tenantId],
+    queryFn: () => apiFetch(`/admin/tenants/${tenantId}`),
+    enabled: !!tenantId,
+  });
+}
+
+export function useAdminUpdateTenant() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ tenantId, ...data }: { tenantId: number; name?: string; slug?: string; billingStatus?: string }) =>
+      apiFetch(`/admin/tenants/${tenantId}`, { method: "PUT", body: JSON.stringify(data) }),
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["admin-tenants"] });
+      qc.invalidateQueries({ queryKey: ["admin-tenant-detail", vars.tenantId] });
+      qc.invalidateQueries({ queryKey: ["admin-overview"] });
+    },
+  });
+}
+
+export function useAdminChangePlan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ tenantId, plan, billingCycle }: { tenantId: number; plan: string; billingCycle?: string }) =>
+      apiFetch(`/admin/tenants/${tenantId}/plan`, { method: "PUT", body: JSON.stringify({ plan, billingCycle }) }),
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["admin-tenants"] });
+      qc.invalidateQueries({ queryKey: ["admin-tenant-detail", vars.tenantId] });
+      qc.invalidateQueries({ queryKey: ["admin-overview"] });
+    },
+  });
+}
+
+export function useAdminDeleteTenant() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (tenantId: number) =>
+      apiFetch(`/admin/tenants/${tenantId}`, { method: "DELETE" }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-tenants"] });
+      qc.invalidateQueries({ queryKey: ["admin-overview"] });
+    },
+  });
+}
+
+export function useAdminUpdateCredits() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ tenantId, aiCreditsUsed, aiCreditsLimit }: { tenantId: number; aiCreditsUsed?: number; aiCreditsLimit?: number }) =>
+      apiFetch(`/admin/tenants/${tenantId}/credits`, { method: "PUT", body: JSON.stringify({ aiCreditsUsed, aiCreditsLimit }) }),
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["admin-tenants"] });
+      qc.invalidateQueries({ queryKey: ["admin-tenant-detail", vars.tenantId] });
+    },
+  });
+}
+
 export function useReports(tenantId: number | null) {
   return useQuery({
     queryKey: ["reports", tenantId],
