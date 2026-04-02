@@ -8,7 +8,7 @@ import { Link } from "wouter";
 import {
   TrendingUp, TrendingDown, Zap, PenTool, Megaphone, BarChart3,
   Lightbulb, AlertTriangle, ArrowUpRight, Eye, MousePointerClick, Target,
-  Sparkles, FileText, Crown
+  Sparkles, FileText, Crown, Palette
 } from "lucide-react";
 
 export default function Analytics() {
@@ -267,26 +267,28 @@ export default function Analytics() {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base font-semibold">Quick Stats</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {[
-                  { label: "Active Campaigns", value: campaignCount, icon: Megaphone },
-                  { label: "Total Assets", value: totalContent, icon: PenTool },
-                  { label: "AI Sessions", value: totalAiUsage, icon: Zap },
-                ].map(s => (
-                  <div key={s.label} className="flex items-center justify-between p-2.5 bg-muted/30 rounded-lg">
-                    <div className="flex items-center gap-2.5">
-                      <s.icon className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{s.label}</span>
-                    </div>
-                    <span className="font-bold text-sm">{s.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+            {!hasData && (
+              <Card className="border-primary/20">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base font-semibold">Get Started</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2.5">
+                  {[
+                    { icon: Palette, text: "Set up a brand in Brand HQ", href: "/brands" },
+                    { icon: PenTool, text: "Generate copy in the AI Copy Studio", href: "/copy-studio" },
+                    { icon: Megaphone, text: "Launch a campaign to track metrics", href: "/campaigns" },
+                  ].map((step, i) => (
+                    <Link key={i} href={step.href}>
+                      <div className="flex items-center gap-2.5 p-2.5 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer group">
+                        <step.icon className="h-4 w-4 text-primary" />
+                        <span className="text-sm">{step.text}</span>
+                        <ArrowUpRight className="h-3 w-3 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    </Link>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>

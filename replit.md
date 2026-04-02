@@ -125,6 +125,8 @@ All tenant routes require authentication + membership verification.
 Public pages:
 - `/` - Premium marketing landing page (hero, features, how-it-works, testimonials, pricing preview, FAQ, footer)
 - `/pricing` - Pricing tiers with monthly/annual toggle, plan comparison table, FAQ
+- `/privacy` - Privacy Policy page
+- `/terms` - Terms of Service page
 - `/login` - Replit Auth login
 
 Authenticated pages (all use AppLayout with sidebar):
@@ -150,11 +152,14 @@ Authenticated pages (all use AppLayout with sidebar):
 - Contextual empty states on every page with specific guidance and clear CTAs
 - Filtered empty states in Templates and Integrations with "Clear Filters" action
 - Report preview chart uses deterministic data (not Math.random)
-- Plan feature names consistent between home page and pricing page
+- Plan feature lists fully aligned between home page and pricing page (identical features per tier)
 - Security/compliance claims verified and softened where unverifiable (e.g. "Enterprise Security" not "SOC 2 Compliant")
 - Negative remaining credits edge case handled with Math.max(0, ...)
 - Upgrade CTAs use Crown icon with contextual per-feature text
 - Dashboard contextual actions derived from actual user state (hasBrands, hasCopy, hasCampaigns, creditPercent)
+- Footer legal links route to real Privacy Policy and Terms of Service pages (not placeholder destinations)
+- Template usage counts only render when > 0 (no "undefined uses" display)
+- Templates page hides search/filter UI when no templates exist, shows clean empty state with CTA
 
 ## Design System
 

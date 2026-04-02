@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import {
   FileText, Download, Plus, BarChart3, TrendingUp, Users,
-  Megaphone, PenTool, Eye, Palette, ArrowUpRight, Lock, CheckCircle2, Crown
+  Megaphone, PenTool, Eye, Palette, ArrowUpRight, Lock, CheckCircle2, Crown, Sparkles
 } from "lucide-react";
 
 const reportTypes = [
@@ -128,6 +128,12 @@ export default function ReportsPage() {
           </TabsContent>
 
           <TabsContent value="preview" className="mt-6">
+            <div className="mb-3 flex items-center gap-2">
+              <Badge variant="outline" className="text-[10px]">
+                <Eye className="h-2.5 w-2.5 mr-1" /> Sample Preview
+              </Badge>
+              <span className="text-xs text-muted-foreground">This is what your generated reports will look like.</span>
+            </div>
             <Card className="overflow-hidden">
               <div className="bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-6 text-white">
                 <div className="flex items-center gap-3 mb-4">
@@ -138,24 +144,24 @@ export default function ReportsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-white/70">
-                  <span>Generated {new Date().toLocaleDateString()}</span>
                   <span>Last 30 days</span>
+                  <span>All campaigns</span>
                 </div>
               </div>
               <CardContent className="pt-6 space-y-6">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {[
-                    { label: "Total Impressions", value: "—", change: "—" },
-                    { label: "Click-Through Rate", value: "—", change: "—" },
-                    { label: "Conversions", value: "—", change: "—" },
-                    { label: "Cost Per Acquisition", value: "—", change: "—" },
-                    { label: "Revenue Generated", value: "—", change: "—" },
-                    { label: "ROAS", value: "—", change: "—" },
+                    { label: "Total Impressions", value: "24.8K", change: "+12%" },
+                    { label: "Click-Through Rate", value: "3.2%", change: "+0.4%" },
+                    { label: "Conversions", value: "847", change: "+18%" },
+                    { label: "Cost Per Acquisition", value: "$12.40", change: "-8%" },
+                    { label: "Revenue Generated", value: "$10.5K", change: "+22%" },
+                    { label: "ROAS", value: "4.2x", change: "+0.6x" },
                   ].map(kpi => (
                     <div key={kpi.label} className="p-4 bg-muted/30 rounded-xl text-center">
-                      <div className="text-2xl font-bold text-muted-foreground/40">{kpi.value}</div>
+                      <div className="text-2xl font-bold">{kpi.value}</div>
                       <div className="text-xs text-muted-foreground mt-1">{kpi.label}</div>
-                      <div className="text-xs text-muted-foreground/50 mt-0.5">{kpi.change}</div>
+                      <div className="text-xs text-green-600 font-medium mt-0.5">{kpi.change}</div>
                     </div>
                   ))}
                 </div>
@@ -172,7 +178,9 @@ export default function ReportsPage() {
                   </div>
                 </div>
                 <div className="bg-muted/30 rounded-xl p-4">
-                  <h3 className="font-semibold text-sm mb-3">AI Recommendations</h3>
+                  <h3 className="font-semibold text-sm mb-3 flex items-center gap-1.5">
+                    <Sparkles className="h-3.5 w-3.5 text-amber-500" /> AI Recommendations
+                  </h3>
                   <div className="space-y-2">
                     {["Increase ad spend on top-performing channels — CTR is above average", "Test video creatives for social campaigns — video tends to drive higher engagement", "Create retargeting sequences for visitors who didn't convert"].map((rec, i) => (
                       <div key={i} className="flex items-start gap-2 text-sm">
@@ -181,9 +189,6 @@ export default function ReportsPage() {
                       </div>
                     ))}
                   </div>
-                </div>
-                <div className="text-center text-xs text-muted-foreground py-2 border-t">
-                  <p>Report data populates from your live campaigns and analytics. Create a report to generate real KPIs.</p>
                 </div>
               </CardContent>
             </Card>

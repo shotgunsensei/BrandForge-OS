@@ -23,6 +23,7 @@ import IntegrationsPage from "./pages/integrations";
 import TemplatesPage from "./pages/templates";
 import AdminPage from "./pages/admin";
 import ReportsPage from "./pages/reports";
+import { PrivacyPage, TermsPage } from "./pages/legal";
 
 function NotFound() {
   return <div className="p-8 text-center">404 Not Found</div>;
@@ -51,6 +52,8 @@ function Router() {
       <Route path="/templates" component={TemplatesPage} />
       <Route path="/admin" component={AdminPage} />
       <Route path="/reports" component={ReportsPage} />
+      <Route path="/privacy" component={PrivacyPage} />
+      <Route path="/terms" component={TermsPage} />
       <Route component={NotFound} />
     </Switch>
   );

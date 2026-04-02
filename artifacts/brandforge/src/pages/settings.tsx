@@ -18,7 +18,7 @@ import {
 import { Link } from "wouter";
 
 const planLabels: Record<string, { name: string; price: string; color: string }> = {
-  free: { name: "Free", price: "$0/mo", color: "bg-slate-500/10 text-slate-600" },
+  free: { name: "Free", price: "$0 forever", color: "bg-slate-500/10 text-slate-600" },
   starter: { name: "Starter", price: "$19/mo", color: "bg-blue-500/10 text-blue-600" },
   growth: { name: "Growth", price: "$59/mo", color: "bg-green-500/10 text-green-600" },
   agency: { name: "Agency", price: "$149/mo", color: "bg-purple-500/10 text-purple-600" },
@@ -244,7 +244,7 @@ export default function SettingsPage() {
                       </div>
                       <div className="flex justify-between text-xs">
                         <span className="text-muted-foreground">{used} used</span>
-                        <span className="font-medium">{isUnlimited ? "Unlimited" : `${limit - used} remaining`}</span>
+                        <span className="font-medium">{isUnlimited ? "Unlimited" : `${Math.max(0, limit - used)} remaining`}</span>
                       </div>
                       {isNearLimit && (
                         <Button variant="outline" size="sm" className="w-full rounded-full text-xs" asChild>

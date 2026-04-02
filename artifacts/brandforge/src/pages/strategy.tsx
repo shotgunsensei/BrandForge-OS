@@ -41,10 +41,10 @@ export default function Strategy() {
 
   return (
     <AppLayout>
-      <div className="p-8 space-y-6">
+      <div className="p-6 lg:p-8 space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Strategy Workspace</h1>
-          <p className="text-muted-foreground">AI-powered strategic planning for your marketing</p>
+          <h1 className="text-2xl font-bold tracking-tight">Strategy Workspace</h1>
+          <p className="text-muted-foreground text-sm">AI-powered strategic planning for your marketing</p>
         </div>
 
         <Tabs defaultValue="strategy">

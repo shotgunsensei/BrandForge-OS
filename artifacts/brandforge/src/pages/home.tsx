@@ -18,10 +18,10 @@ const features = [
 ];
 
 const plans = [
-  { name: "Free", price: 0, annual: 0, features: ["1 Brand", "3 Campaigns", "50 AI Credits/mo", "Basic Analytics"], cta: "Get Started" },
-  { name: "Starter", price: 19, annual: 15, features: ["3 Brands", "10 Campaigns", "200 AI Credits/mo", "Full Analytics", "Content Calendar"], cta: "Start Free Trial" },
-  { name: "Growth", price: 59, annual: 47, popular: true, features: ["10 Brands", "Unlimited Campaigns", "1,000 AI Credits/mo", "Strategy Workspace", "5 Team Members", "API Access"], cta: "Start Free Trial" },
-  { name: "Agency", price: 149, annual: 119, features: ["25 Brands", "Unlimited Everything", "5,000 AI Credits/mo", "White-Label Reports", "Client Review Mode", "15 Team Members"], cta: "Start Free Trial" },
+  { name: "Free", price: 0, annual: 0, features: ["1 Brand", "3 Campaigns", "50 AI Credits/mo", "Basic Analytics", "Copy Studio", "Community Support"], cta: "Get Started" },
+  { name: "Starter", price: 19, annual: 15, features: ["3 Brands", "10 Campaigns", "200 AI Credits/mo", "Full Analytics", "Content Calendar", "AI Workflows", "Email Support"], cta: "Start Free Trial" },
+  { name: "Growth", price: 59, annual: 47, popular: true, features: ["10 Brands", "Unlimited Campaigns", "1,000 AI Credits/mo", "Advanced Analytics", "Strategy Workspace", "AI Workflows", "5 Team Members", "API Access", "Priority Support"], cta: "Start Free Trial" },
+  { name: "Agency", price: 149, annual: 119, features: ["25 Brands", "Unlimited Everything", "5,000 AI Credits/mo", "White Label Reports", "Client Review Mode", "15 Team Members", "Custom Integrations", "Dedicated Support"], cta: "Start Free Trial" },
 ];
 
 const testimonials = [
@@ -287,7 +287,7 @@ export default function Home() {
                     <h3 className="font-semibold text-lg">{p.name}</h3>
                     <div className="mt-2 mb-4">
                       <span className="text-4xl font-bold">${annual ? p.annual : p.price}</span>
-                      {p.price > 0 && <span className="text-muted-foreground">/mo</span>}
+                      <span className="text-muted-foreground">{p.price === 0 ? " forever" : "/mo"}</span>
                       {annual && p.price > 0 && (
                         <div className="text-xs text-green-600 font-medium mt-1">Save ${(p.price - p.annual) * 12}/year</div>
                       )}
@@ -365,20 +365,20 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <h4 className="font-semibold text-sm mb-3">Company</h4>
+              <h4 className="font-semibold text-sm mb-3">Resources</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <span className="block">About</span>
-                <span className="block">Blog</span>
-                <span className="block">Careers</span>
-                <span className="block">Contact</span>
+                <a href="#faq" className="block hover:text-foreground transition-colors">Help Center</a>
+                <Link href="/pricing" className="block hover:text-foreground transition-colors">Pricing</Link>
+                <a href="#features" className="block hover:text-foreground transition-colors">Changelog</a>
+                <Link href="/login" className="block hover:text-foreground transition-colors">Sign In</Link>
               </div>
             </div>
             <div>
               <h4 className="font-semibold text-sm mb-3">Legal</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <span className="block">Privacy Policy</span>
-                <span className="block">Terms of Service</span>
-                <span className="block">Security</span>
+                <Link href="/privacy" className="block hover:text-foreground transition-colors">Privacy Policy</Link>
+                <Link href="/terms" className="block hover:text-foreground transition-colors">Terms of Service</Link>
+                <a href="#faq" className="block hover:text-foreground transition-colors">Security</a>
               </div>
             </div>
           </div>
