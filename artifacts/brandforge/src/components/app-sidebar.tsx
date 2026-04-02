@@ -75,14 +75,20 @@ export function AppSidebar() {
   const { tenantId, setTenantId } = useTenant();
   const { data: tenants } = useListTenants({ query: { queryKey: ["tenants"] } });
   const [collapsed, setCollapsed] = useState(false);
-  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
+  const [dark, setDark] = useState(() => {
+    const saved = localStorage.getItem("bf-theme");
+    if (saved === "light") return false;
+    return true;
+  });
   const [showSwitcher, setShowSwitcher] = useState(false);
 
   useEffect(() => {
     if (dark) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem("bf-theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem("bf-theme", "light");
     }
   }, [dark]);
 
