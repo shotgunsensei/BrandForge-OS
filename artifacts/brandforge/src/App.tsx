@@ -18,6 +18,7 @@ import CalendarPage from "./pages/calendar";
 import Analytics from "./pages/analytics";
 import SettingsPage from "./pages/settings";
 import Strategy from "./pages/strategy";
+import AIWorkflows from "./pages/ai-workflows";
 
 function NotFound() {
   return <div className="p-8 text-center">404 Not Found</div>;
@@ -41,6 +42,7 @@ function Router() {
       <Route path="/analytics" component={Analytics} />
       <Route path="/settings" component={SettingsPage} />
       <Route path="/strategy" component={Strategy} />
+      <Route path="/ai-workflows" component={AIWorkflows} />
       <Route component={NotFound} />
     </Switch>
   );

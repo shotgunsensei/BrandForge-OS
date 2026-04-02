@@ -1,0 +1,516 @@
+You are upgrading an existing SaaS application called BrandForge OS.
+
+BrandForge OS is a multi-tenant AI-powered marketing and advertising operating system for businesses, founders, agencies, and multi-brand operators. The app already has the foundation of the product. Your job now is to execute Phase 2 and final MVP polish so the product feels premium, coherent, monetizable, and much closer to launch readiness.
+
+IMPORTANT:
+Do not rebuild this from scratch unless necessary.
+Preserve and improve the existing architecture, components, schema, and flows where possible.
+Refactor weak areas only when required for stability, clarity, scalability, or UX quality.
+
+PRIMARY GOAL
+Take BrandForge OS from a promising MVP into a polished, investor-demo-ready, customer-demo-ready, monetizable SaaS platform with:
+- stronger UX
+- better onboarding
+- smarter AI workflows
+- cleaner multi-tenant logic
+- premium SaaS presentation
+- realistic billing architecture
+- integration-ready systems
+- clearer feature gating
+- better collaboration
+- better design tooling
+- more believable analytics and workflow continuity
+
+==================================================
+PHASE 2 OBJECTIVES
+==================================================
+
+1. PRODUCT POLISH AND UX CONSISTENCY
+Audit the entire app and improve weak, inconsistent, confusing, cheap-looking, or unfinished areas.
+
+Goals:
+- unify spacing, typography, card styling, button treatments, icon usage, empty states, and table styling
+- improve visual hierarchy across all pages
+- reduce clutter and improve scan-ability
+- make every major page feel intentionally designed
+- ensure dashboard and app shell feel premium and modern
+- improve mobile and tablet responsiveness where realistic
+- remove dead ends, disconnected buttons, placeholder-feeling interactions, and broken flows
+- improve form UX, progress indicators, confirmations, and success states
+- add more polished hover/focus/active states
+- make upgrade prompts elegant instead of spammy
+- ensure dark mode and light mode both look deliberate
+
+Design tone:
+- premium SaaS
+- modern operator dashboard
+- clean but powerful
+- creative-tool grade polish
+- founder-friendly and agency-friendly
+- should feel more like a real paid platform than a prototype
+
+2. ONBOARDING 2.0
+Upgrade onboarding into a genuinely valuable guided setup wizard.
+
+The onboarding should:
+- feel fast, clear, and premium
+- include step progress with save-and-resume support
+- intelligently branch based on user type:
+  - solo founder
+  - small business
+  - agency
+  - SaaS/startup
+  - local service business
+  - e-commerce brand
+- ask structured questions about:
+  - business name
+  - website
+  - industry
+  - products/services
+  - ideal customer
+  - geographic market
+  - goals
+  - content channels
+  - competitors
+  - tone/voice
+  - brand colors/logo
+  - current marketing maturity
+- generate a useful onboarding result:
+  - brand snapshot
+  - ICP summary
+  - messaging pillars
+  - recommended campaign type
+  - suggested first-week action plan
+  - recommended templates to start with
+
+Make the onboarding output saved and editable later from Brand HQ.
+
+3. AI WORKFLOW INTELLIGENCE
+Transform the AI experience from isolated generators into connected workflows.
+
+Build reusable AI workflows such as:
+- “Launch a new product”
+- “Generate a 30-day content plan”
+- “Create a paid ad campaign”
+- “Build a local service lead gen campaign”
+- “Create a funnel for a service offer”
+- “Refresh weak messaging”
+- “Make 10 ad angles for this offer”
+- “Turn a landing page into social/email/ad campaign assets”
+
+Each workflow should:
+- collect structured inputs
+- generate multiple linked outputs
+- save those outputs into appropriate modules
+- allow editing and regeneration
+- preserve history
+- use the tenant’s brand voice, offers, audience, and prior inputs
+- surface high-quality recommendations instead of generic fluff
+
+The AI layer should feel guided, contextual, and brand-aware.
+
+4. COPY STUDIO UPGRADE
+Upgrade Copy Studio into a serious production module.
+
+Add:
+- generation modes by channel:
+  - Google ad
+  - Meta ad
+  - LinkedIn post
+  - email campaign
+  - landing page copy
+  - sales page copy
+  - SMS
+  - short-form script
+  - retargeting ad
+  - product description
+- controls for:
+  - audience
+  - tone
+  - objective
+  - length
+  - urgency
+  - offer style
+  - CTA style
+- ability to generate multiple variants in one pass
+- side-by-side compare mode
+- favorite / archive / reuse system
+- “improve this copy” and “rewrite with stronger hooks” actions
+- content score indicators such as:
+  - clarity
+  - persuasion
+  - specificity
+  - CTA strength
+- save outputs directly into campaigns
+
+5. CREATIVE STUDIO UPGRADE
+Upgrade Creative Studio from a basic editor into a practical business design system.
+
+Add:
+- better canvas interactions
+- draggable layers
+- lock/unlock layers
+- duplicate/hide/reorder layers
+- alignment tools
+- snap-to-grid
+- padding-safe zones for channel formats
+- presets for:
+  - Instagram post
+  - story
+  - Facebook ad
+  - LinkedIn banner
+  - YouTube thumbnail
+  - email header
+  - flyer
+  - hero banner
+- improved template selection experience
+- tenant brand kit autofill
+- AI-assisted text suggestions inside templates
+- generate design variants
+- upload library for logos/product images/backgrounds
+- export options
+- version history for designs
+- better placeholder replacement logic
+
+Do not make this a flimsy toy. It should feel like a streamlined business creative builder, not an art app.
+
+6. CAMPAIGN BUILDER 2.0
+Strengthen campaign management so it feels operationally useful.
+
+Each campaign should support:
+- objective
+- audience
+- offer
+- budget placeholder
+- channels
+- timeline
+- owner
+- status
+- notes
+- approvals
+- linked assets
+- linked copy
+- linked landing pages
+- checklist items
+- performance summary
+
+Improve campaign views with:
+- overview tab
+- strategy tab
+- assets tab
+- copy tab
+- landing page tab
+- calendar tab
+- approvals/activity tab
+- analytics tab
+
+Add campaign templates such as:
+- product launch
+- lead generation
+- webinar signup
+- seasonal promotion
+- reactivation campaign
+- local service promotion
+- content growth campaign
+
+7. LANDING PAGE BUILDER PHASE 2
+Upgrade the landing page builder into a more robust modular system.
+
+Add:
+- reusable sections
+- section duplication
+- better inline editing
+- mobile preview
+- desktop preview
+- SEO field controls
+- OG/social sharing settings
+- form builder basics
+- CTA variants
+- testimonial blocks
+- FAQ blocks
+- pricing blocks
+- feature comparison blocks
+- announcement/promo bars
+- scheduling/contact placeholders
+- publish state management
+
+Architecture should be ready for:
+- custom domains later
+- per-tenant hosted pages
+- analytics events
+- A/B testing later
+
+8. CONTENT CALENDAR + WORKFLOW
+Make the content calendar useful rather than decorative.
+
+Add:
+- drag-and-drop scheduling
+- filter by campaign/channel/status
+- create content directly from calendar
+- approval states
+- connected copy/design assets
+- planned/published status logic
+- monthly / weekly views
+- team assignments
+- content brief cards
+- overdue indicators
+
+9. COLLABORATION + CLIENT REVIEW MODE
+Add stronger collaboration and agency usability.
+
+Add:
+- comments on campaigns, copy, and designs
+- approval requests
+- approve/reject/revision-needed states
+- lightweight client review mode
+- shareable review links with scoped access
+- activity logs
+- notifications center
+- mention system placeholders
+- role-aware action controls
+
+Client review mode should feel simple and safe.
+
+10. BILLING + MONETIZATION POLISH
+Implement a much cleaner monetization layer.
+
+Pricing model to support:
+- Free
+- Starter
+- Growth
+- Agency
+- Enterprise
+
+Suggested pricing:
+- Free: $0
+- Starter: $19/mo
+- Growth: $59/mo
+- Agency: $149/mo
+- Enterprise: custom, starting around $399/mo
+
+Implement:
+- monthly / annual toggle
+- annual discount presentation
+- upgrade/downgrade path
+- plan comparison table
+- trial support
+- usage meter for AI credits
+- billing usage cards
+- feature gating by plan
+- seat limits by plan
+- brand/workspace limits by plan
+- upgrade prompts when limits are hit
+- overage-ready architecture for AI credits and storage
+
+Make pricing pages and in-app billing feel polished and credible.
+
+11. MULTI-TENANT + AGENCY IMPROVEMENTS
+Strengthen tenant architecture and multi-workspace support.
+
+Requirements:
+- clear tenant/workspace switcher
+- membership and role handling
+- invitation flow
+- workspace branding
+- per-tenant settings
+- brand/product separation inside a tenant
+- agency support for managing multiple brands/clients cleanly
+- better permission boundaries
+- audit logs for key actions
+
+Agency plan should feel like it was actually built for client management.
+
+12. ANALYTICS + RECOMMENDATION ENGINE
+Upgrade analytics into something believable and useful.
+
+Even if some data is mocked, structure it like a real analytics product.
+
+Show:
+- active campaigns
+- content output volume
+- top-performing channels
+- estimated ROI
+- landing page conversion placeholders
+- content engagement placeholders
+- asset production trends
+- AI usage trends
+- team activity
+- approval bottlenecks
+
+Add an AI recommendation panel that can suggest things like:
+- “This campaign has no clear CTA”
+- “Your landing page is missing proof elements”
+- “Try shorter hook variants for paid ads”
+- “You haven’t published in 8 days”
+- “This audience is too broad for this offer”
+- “Create retargeting variants for your best-performing copy”
+
+Recommendations should feel specific and operational.
+
+13. TEMPLATE MARKETPLACE FOUNDATIONS
+Prepare the app for future monetization through templates.
+
+Support template entities for:
+- campaigns
+- copy packs
+- design packs
+- landing pages
+- brand kits
+- content calendars
+
+Add:
+- save as template
+- duplicate from template
+- featured templates UI
+- categories/tags
+- marketplace-ready data structure
+- template preview cards
+
+14. INTEGRATION-READY ARCHITECTURE
+Do not fully depend on live APIs if difficult, but build realistic integration scaffolding.
+
+Prepare integration structures for:
+- Meta Ads
+- Google Ads
+- LinkedIn
+- TikTok
+- Mailchimp / email systems
+- Canva-like asset export compatibility
+- analytics hooks
+- CRM/webhook integrations
+
+Build:
+- integration settings page
+- connection cards
+- status states
+- webhook/API placeholder layer
+- integration service abstractions
+- sync status / last synced indicators
+
+15. MARKETING SITE FINAL POLISH
+The public marketing website for BrandForge OS must be upgraded too.
+
+Improve:
+- homepage hero
+- positioning clarity
+- product screenshots/mockups
+- feature sections
+- workflow explanation
+- pricing page
+- FAQ
+- CTA structure
+- trust-building layout
+- footer
+- app preview sections
+- testimonials placeholders
+- comparison positioning
+
+The site should clearly communicate:
+- what BrandForge OS does
+- who it is for
+- why it is different
+- why it is better than juggling multiple disconnected tools
+- why agencies and SMBs both benefit
+
+Tone:
+- premium
+- credible
+- operator-focused
+- not overhyped
+- high clarity
+- visually compelling
+
+==================================================
+TECHNICAL / ARCHITECTURAL EXPECTATIONS
+==================================================
+
+- preserve and improve modular code structure
+- clean TypeScript types
+- improve component reuse
+- improve loading states / skeletons
+- improve error handling
+- add realistic seed/demo data
+- improve Prisma schema where needed
+- ensure feature gating is implemented cleanly
+- improve state management if current implementation is messy
+- add service abstraction for AI and integrations
+- keep future API and enterprise support in mind
+- prepare for white-label and custom domain support later
+- make sure navigation and routing feel complete
+- ensure no major obvious broken flows remain
+
+==================================================
+DATA MODEL EXPECTATIONS
+==================================================
+
+Ensure or improve support for entities like:
+- User
+- Tenant
+- Membership
+- Subscription
+- UsageRecord
+- Brand
+- Persona
+- Offer
+- Product
+- Campaign
+- CampaignTask
+- CampaignAsset
+- CopyAsset
+- DesignAsset
+- LandingPage
+- Template
+- Comment
+- ApprovalRequest
+- ActivityLog
+- Notification
+- Integration
+- BillingProfile
+- AuditLog
+
+==================================================
+FINAL POLISH PASS REQUIREMENTS
+==================================================
+
+Perform a comprehensive product-quality pass:
+- remove awkward copy
+- improve empty states
+- improve upgrade messaging
+- improve dashboard summaries
+- improve table readability
+- improve icon consistency
+- improve modal/dialog consistency
+- improve form validation and helper text
+- improve sidebar/nav organization
+- improve settings UX
+- make the app feel cohesive and premium
+
+Look for anything that feels:
+- unfinished
+- generic
+- repetitive
+- fake
+- cheap
+- disconnected
+- confusing
+and improve it.
+
+==================================================
+DELIVERABLE EXPECTATION
+==================================================
+
+Deliver a polished, fully navigable, strong MVP-plus SaaS platform that feels investor-demo-ready and early-customer-ready.
+
+Do not stop at surface styling.
+Make the product feel meaningfully more complete in workflow depth, monetization readiness, UX quality, and multi-tenant SaaS credibility.
+
+Where real third-party services are not fully connected yet, build believable scaffolding, clear UI states, clean service abstractions, and realistic mock data so the app still feels coherent and valuable.
+
+Also update the README to explain:
+- architecture
+- setup
+- environment variables
+- Stripe billing structure
+- tenant model
+- AI workflow system
+- future integration points

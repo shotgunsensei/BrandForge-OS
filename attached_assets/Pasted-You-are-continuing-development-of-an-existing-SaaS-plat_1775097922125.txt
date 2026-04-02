@@ -1,0 +1,447 @@
+You are continuing development of an existing SaaS platform called BrandForge OS.
+
+BrandForge OS is a multi-tenant AI-powered marketing operating system for businesses, founders, agencies, and multi-brand teams. The app already has:
+- a strong MVP foundation
+- onboarding
+- brand management
+- AI workflows
+- copy generation
+- creative studio
+- campaign builder
+- landing page builder
+- content calendar
+- analytics dashboards
+- billing foundations
+- multi-tenant architecture
+
+Your job now is to execute Phase 3: monetization, integrations, reporting, publishing, marketplace foundations, and revenue-driving product improvements that make BrandForge OS feel commercially viable and genuinely launchable.
+
+IMPORTANT:
+- Do not rebuild the product from scratch
+- Preserve the best existing architecture and improve it
+- Refactor only where needed for clarity, monetization, scalability, or cleaner integrations
+- Prioritize real business value, real upgrade triggers, and real operational usefulness
+- Make the platform feel like it can actually be sold to customers
+
+==================================================
+PHASE 3 GOALS
+==================================================
+
+1. REAL MONETIZATION READINESS
+Expand the billing and monetization system so it feels like a real SaaS business, not just plan cards.
+
+Implement or strengthen:
+- Stripe subscription handling
+- monthly and annual billing
+- plan upgrades/downgrades
+- trial logic
+- grace period / past due states
+- usage-based metering architecture
+- overage support for AI credits
+- overage support for storage
+- seat-based billing support
+- invoice/history UI
+- billing status banners
+- cancel/reactivate flows
+- subscription change confirmations
+- payment method management
+- billing email/contact fields
+- tax/VAT readiness in structure
+- enterprise contact / quote request flow
+
+Pricing tiers should remain:
+- Free
+- Starter ($19/mo)
+- Growth ($59/mo)
+- Agency ($149/mo)
+- Enterprise (custom / starting around $399/mo)
+
+Annual plans should show meaningful discount positioning.
+
+Add monetization triggers throughout the app:
+- AI credit limit reached
+- brand limit reached
+- user seat limit reached
+- export limit reached
+- premium template locked
+- collaboration features locked
+- advanced analytics locked
+- client review features locked
+- white-label/reporting features locked
+
+Upgrade prompts must be helpful, elegant, and context-aware, not spammy.
+
+2. USAGE METERING + PLAN ENFORCEMENT
+Implement a robust usage system that tracks and enforces:
+- AI credits
+- storage usage
+- exports
+- brands/products count
+- workspaces or client accounts
+- seats/users
+- published landing pages
+- premium template usage
+
+Requirements:
+- usage dashboard cards
+- tenant-level usage records
+- limit enforcement service
+- warnings near thresholds
+- plan-aware feature checks
+- overage-ready schema
+- admin visibility into tenant usage
+- future compatibility with prepaid credit packs
+
+3. CREDIT PACKS / ADD-ON MONETIZATION
+Build add-on monetization support.
+
+Support purchasable or assignable add-ons such as:
+- extra AI credit packs
+- extra storage packs
+- additional user seats
+- premium template bundle access
+- white-label reporting add-on
+- additional published landing pages
+- advanced export pack
+- agency client pack
+
+Add:
+- add-ons section in billing
+- pricing cards for add-ons
+- tenant add-on state handling
+- usage reconciliation hooks
+- clean architecture for future marketplace purchases
+
+4. INTEGRATIONS HUB
+Create a serious integrations hub and connection architecture.
+
+Build integration scaffolding and UI for:
+- Meta Ads
+- Google Ads
+- LinkedIn
+- TikTok
+- Mailchimp
+- generic SMTP/email provider
+- webhooks
+- CRM integrations (generic placeholder architecture)
+- analytics platforms
+- custom API connections
+
+For each integration:
+- connection card
+- status state
+- connect/disconnect flow
+- sync status
+- last synced timestamp
+- account info placeholder
+- permissions state
+- error state handling
+- configuration/settings drawer
+
+This can use mocked or scaffolded service layers where live APIs are not yet fully implemented, but the architecture must be real enough for production evolution.
+
+5. PERFORMANCE DATA INGESTION ARCHITECTURE
+Prepare the app to consume and display performance data from external systems.
+
+Create architecture for:
+- campaign performance ingestion
+- ad account metrics
+- landing page conversion events
+- content publishing performance
+- email campaign summary data
+- basic attribution placeholders
+
+Even if full live sync is not complete, implement:
+- normalized metric models
+- ingestion service abstractions
+- sync job placeholders
+- UI for synced vs unsynced data
+- fallback demo data logic
+- confidence indicators or “sample/mock data” states where appropriate
+
+6. PUBLISHING WORKFLOW FOUNDATIONS
+Add publishing and distribution readiness.
+
+Support future-ready publishing flows for:
+- social posts
+- email campaigns
+- landing pages
+- exported ad packages
+- downloadable asset bundles
+
+Build:
+- publish/schedule UI patterns
+- channel selection states
+- publishing confirmation states
+- preflight validation
+- content package export flow
+- “ready to publish” checklist
+- publishing status tags
+- failed publish state handling
+- scheduled state model
+
+The user should feel like BrandForge OS is preparing and managing real launch activity.
+
+7. CLIENT REPORTING + WHITE-LABEL FOUNDATIONS
+This is critical for agencies and high-value plans.
+
+Build:
+- report builder foundations
+- branded report export structure
+- agency/client report views
+- KPI summary blocks
+- campaign summaries
+- asset output summaries
+- usage summaries
+- recommendations summary
+- PDF/export-ready layout foundations
+- white-label settings scaffolding
+- custom logo/color report branding per tenant
+
+Even if PDF generation is partially scaffolded, the report system should look and feel like a real monetizable agency feature.
+
+8. TEMPLATE MARKETPLACE MONETIZATION
+Turn templates into revenue-capable objects.
+
+Support:
+- free templates
+- premium templates
+- featured templates
+- tenant-saved templates
+- organization templates
+- future marketplace purchases
+
+Template types:
+- campaigns
+- copy packs
+- landing pages
+- design packs
+- email sequences
+- brand kits
+- content calendars
+
+Add:
+- template detail view
+- template preview
+- “use template”
+- “save as template”
+- locked/premium states
+- categories/tags
+- usage count
+- template metadata
+- monetization-ready schema
+
+9. SALES / DEMO FUNNEL SUPPORT
+Make the product better at selling itself.
+
+Build:
+- “book a demo” flow placeholder
+- contact sales form
+- lead capture for enterprise interest
+- upgrade CTA banners
+- onboarding nudges for activation
+- success milestone prompts
+- trial conversion prompts
+- “invite your team” prompts
+- first-publish prompt
+- first-campaign completion milestone
+
+This should increase product-led growth behavior.
+
+10. ADMIN REVENUE OPERATIONS AREA
+Upgrade the super admin/system admin area so it can help operate the SaaS business.
+
+Admin capabilities should include:
+- tenant list
+- subscriptions overview
+- usage monitoring
+- plan distribution
+- churn risk indicators placeholders
+- support flags
+- feature flag controls
+- template moderation/future approval
+- billing exception visibility
+- add-on visibility
+- integration health summary
+- system metrics
+- growth dashboard placeholders
+
+This area should feel like operating software for the SaaS owner.
+
+11. ANALYTICS + RECOMMENDATION ENGINE 2.0
+Make analytics more revenue-oriented and action-oriented.
+
+Add recommendation types such as:
+- upgrade recommendations based on usage
+- add-on suggestions based on behavior
+- campaign suggestions based on gaps
+- publish recommendations
+- collaboration recommendations
+- optimization recommendations
+- landing page improvement recommendations
+- ad copy variant recommendations
+- “you are underusing feature X” prompts
+
+This recommendation engine should help both customer success and monetization.
+
+12. LANDING PAGE + FORM MONETIZATION READINESS
+Strengthen landing pages so they can support lead generation more credibly.
+
+Add:
+- form handling structure
+- lead capture model
+- thank-you state logic
+- submission tracking
+- CTA click tracking
+- conversion event architecture
+- basic anti-spam placeholder
+- lead export placeholder
+- CRM-ready mapping structure
+
+13. CUSTOMER SUCCESS / ACTIVATION INFRASTRUCTURE
+Build product activation mechanics.
+
+Add:
+- onboarding completion tracking
+- milestone tracking
+- activation score placeholder
+- checklist widgets
+- contextual tips
+- lifecycle banners
+- re-engagement prompts
+- dormant workspace prompts
+- “next best action” panel
+
+Make the app feel like it is helping customers succeed, not just giving them tools.
+
+14. SECURITY / COMPLIANCE / TRUST FOUNDATIONS
+Improve trust signals and architecture readiness.
+
+Add or polish:
+- audit logs
+- workspace settings clarity
+- role/permission visibility
+- privacy/security settings page
+- API key / webhook secret handling structure
+- data retention settings placeholders
+- account deletion/export readiness in structure
+- billing/admin event logging
+- secure tenant boundary assumptions in code
+
+15. MARKETING SITE + CONVERSION OPTIMIZATION
+Upgrade the public marketing site so it supports product-led growth and sales.
+
+Improve or add:
+- comparison section
+- use cases by persona
+- agency use case
+- SMB use case
+- founder use case
+- workflow screenshots/mockups
+- integration highlights
+- premium template upsell messaging
+- FAQ improvements
+- stronger pricing comparison
+- annual savings messaging
+- demo CTA
+- free signup CTA
+- trust signals
+- “how it works” section
+- upgrade path explanation
+
+The site should clearly move people toward:
+- free signup
+- trial
+- sales contact
+- demo request
+
+==================================================
+UX / UI DIRECTION
+==================================================
+
+The app should feel:
+- premium
+- commercially credible
+- polished
+- scalable
+- agency-capable
+- operator-friendly
+- monetization-aware
+- clean and efficient
+
+Do not add clutter for the sake of features.
+Prefer coherent flows, strong empty states, clean status indicators, and actionable dashboards.
+
+==================================================
+TECHNICAL EXPECTATIONS
+==================================================
+
+- Preserve modular architecture
+- Improve service abstractions for billing and integrations
+- Improve plan enforcement architecture
+- Improve type safety
+- Improve loading and error states
+- Improve schema only where needed
+- Keep future enterprise/API expansion in mind
+- Seed demo data for monetization, reporting, and integrations
+- Ensure the product remains navigable and coherent even with mocked integrations
+
+==================================================
+DATA MODEL / DOMAIN EXPECTATIONS
+==================================================
+
+Ensure support for entities such as:
+- User
+- Tenant
+- Membership
+- Subscription
+- BillingProfile
+- Invoice
+- AddOnPurchase
+- UsageRecord
+- CreditPack
+- Brand
+- Product
+- Offer
+- Persona
+- Campaign
+- CampaignMetric
+- CampaignAsset
+- CopyAsset
+- DesignAsset
+- LandingPage
+- LeadSubmission
+- Template
+- TemplatePurchase
+- Integration
+- SyncJob
+- ActivityLog
+- AuditLog
+- Notification
+- Recommendation
+- Report
+- ExportJob
+- FeatureFlag
+
+==================================================
+FINAL QUALITY BAR
+==================================================
+
+The result should feel like:
+- a serious SaaS product
+- something a founder could demo to prospects
+- something an agency could imagine paying for
+- something that clearly supports upsells and expansion
+- something that can evolve into a sellable business
+
+Do not leave obvious fake areas, dead buttons, or shallow plan logic.
+Where real third-party services are not yet fully live, create realistic scaffolding, sensible status states, and coherent UI behavior.
+
+Also update the README with:
+- monetization model
+- add-on model
+- usage metering structure
+- integrations architecture
+- reporting architecture
+- future live API implementation notes
+- security/trust assumptions
